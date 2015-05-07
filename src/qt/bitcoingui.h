@@ -116,9 +116,9 @@ private:
 
     QMovie *syncIconMovie;
 
-    uint64_t nMinMax;
-    uint64_t nWeight;
-    uint64_t nNetworkWeight;
+    uint64 nMinMax;
+    uint64 nWeight;
+    uint64 nNetworkWeight;
 
     /** Create the main UI actions. */
     void createActions();

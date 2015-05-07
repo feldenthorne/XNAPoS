@@ -914,10 +914,10 @@ std::vector<unsigned char> CNetAddr::GetGroup() const
     return vchRet;
 }
 
-uint64_t CNetAddr::GetHash() const
+uint64 CNetAddr::GetHash() const
 {
     uint256 hash = Hash(&ip[0], &ip[16]);
-    uint64_t nRet;
+    uint64 nRet;
     memcpy(&nRet, &hash, sizeof(nRet));
     return nRet;
 }

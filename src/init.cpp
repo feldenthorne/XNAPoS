@@ -507,7 +507,7 @@ bool AppInit2()
     if (fDaemon)
         fprintf(stdout, "DeOxyRibose server starting\n");
 
-    int64_t nStart;
+    int64 nStart;
 
     // ********************************************************* Step 5: verify database integrity
 
@@ -660,7 +660,7 @@ bool AppInit2()
 
     if (mapArgs.count("-reservebalance")) // reserve balance amount
     {
-        int64_t nReserveBalance = 0;
+        int64 nReserveBalance = 0;
         if (!ParseMoney(mapArgs["-reservebalance"], nReserveBalance))
         {
             InitError(_("Invalid amount for -reservebalance=<amount>"));
