@@ -1,0 +1,2 @@
+debian/bin/deoxyribosed usr/bin
+src/deoxyribosed usr/lib/deoxyribose
