@@ -57,7 +57,7 @@ namespace json_spirit
 
         Value_type type() const;
 
-        bool is_uint64() const;
+        bool is_uint64_t() const;
         bool is_null() const;
 
         const String_type& get_str()    const;
@@ -65,8 +65,8 @@ namespace json_spirit
         const Array&       get_array()  const;
         bool               get_bool()   const;
         int                get_int()    const;
-        boost::int64_t     get_int64()  const;
-        boost::uint64_t    get_uint64() const;
+        boost::int64_t     get_int64_t()  const;
+        boost::uint64_t    get_uint64_t() const;
         double             get_real()   const;
 
         Object& get_obj();
@@ -87,7 +87,7 @@ namespace json_spirit
 
         Value_type type_;
         Variant v_;
-        bool is_uint64_;
+        bool is_uint64_t_;
     };
 
     // vector objects
@@ -211,7 +211,7 @@ namespace json_spirit
     template< class Config >
     Value_impl< Config >::Value_impl()
     :   type_( null_type )
-    ,   is_uint64_( false )
+    ,   is_uint64_t_( false )
     {
     }
 
@@ -219,7 +219,7 @@ namespace json_spirit
     Value_impl< Config >::Value_impl( const Const_str_ptr value )
     :   type_( str_type )
     ,   v_( String_type( value ) )
-    ,   is_uint64_( false )
+    ,   is_uint64_t_( false )
     {
     }
 
@@ -227,7 +227,7 @@ namespace json_spirit
     Value_impl< Config >::Value_impl( const String_type& value )
     :   type_( str_type )
     ,   v_( value )
-    ,   is_uint64_( false )
+    ,   is_uint64_t_( false )
     {
     }
 
@@ -235,7 +235,7 @@ namespace json_spirit
     Value_impl< Config >::Value_impl( const Object& value )
     :   type_( obj_type )
     ,   v_( value )
-    ,   is_uint64_( false )
+    ,   is_uint64_t_( false )
     {
     }
 
@@ -243,7 +243,7 @@ namespace json_spirit
     Value_impl< Config >::Value_impl( const Array& value )
     :   type_( array_type )
     ,   v_( value )
-    ,   is_uint64_( false )
+    ,   is_uint64_t_( false )
     {
     }
 
@@ -251,7 +251,7 @@ namespace json_spirit
     Value_impl< Config >::Value_impl( bool value )
     :   type_( bool_type )
     ,   v_( value )
-    ,   is_uint64_( false )
+    ,   is_uint64_t_( false )
     {
     }
 
@@ -259,7 +259,7 @@ namespace json_spirit
     Value_impl< Config >::Value_impl( int value )
     :   type_( int_type )
     ,   v_( static_cast< boost::int64_t >( value ) )
-    ,   is_uint64_( false )
+    ,   is_uint64_t_( false )
     {
     }
 
@@ -267,7 +267,7 @@ namespace json_spirit
     Value_impl< Config >::Value_impl( boost::int64_t value )
     :   type_( int_type )
     ,   v_( value )
-    ,   is_uint64_( false )
+    ,   is_uint64_t_( false )
     {
     }
 
@@ -275,7 +275,7 @@ namespace json_spirit
     Value_impl< Config >::Value_impl( boost::uint64_t value )
     :   type_( int_type )
     ,   v_( static_cast< boost::int64_t >( value ) )
-    ,   is_uint64_( true )
+    ,   is_uint64_t_( true )
     {
     }
 
@@ -283,7 +283,7 @@ namespace json_spirit
     Value_impl< Config >::Value_impl( double value )
     :   type_( real_type )
     ,   v_( value )
-    ,   is_uint64_( false )
+    ,   is_uint64_t_( false )
     {
     }
 
@@ -291,7 +291,7 @@ namespace json_spirit
     Value_impl< Config >::Value_impl( const Value_impl< Config >& other )
     :   type_( other.type() )
     ,   v_( other.v_ )
-    ,   is_uint64_( other.is_uint64_ )
+    ,   is_uint64_t_( other.is_uint64_t_ )
     {
     }
 
@@ -302,7 +302,7 @@ namespace json_spirit
 
         std::swap( type_, tmp.type_ );
         std::swap( v_, tmp.v_ );
-        std::swap( is_uint64_, tmp.is_uint64_ );
+        std::swap( is_uint64_t_, tmp.is_uint64_t_ );
 
         return *this;
     }
@@ -324,9 +324,9 @@ namespace json_spirit
     }
 
     template< class Config >
-    bool Value_impl< Config >::is_uint64() const
+    bool Value_impl< Config >::is_uint64_t() const
     {
-        return is_uint64_;
+        return is_uint64_t_;
     }
 
     template< class Config >
@@ -386,11 +386,11 @@ namespace json_spirit
     {
         check_type(  int_type );
 
-        return static_cast< int >( get_int64() );
+        return static_cast< int >( get_int64_t() );
     }
     
     template< class Config >
-    boost::int64_t Value_impl< Config >::get_int64() const
+    boost::int64_t Value_impl< Config >::get_int64_t() const
     {
         check_type(  int_type );
 
@@ -398,11 +398,11 @@ namespace json_spirit
     }
     
     template< class Config >
-    boost::uint64_t Value_impl< Config >::get_uint64() const
+    boost::uint64_t Value_impl< Config >::get_uint64_t() const
     {
         check_type(  int_type );
 
-        return static_cast< boost::uint64_t >( get_int64() );
+        return static_cast< boost::uint64_t >( get_int64_t() );
     }
 
     template< class Config >
@@ -410,8 +410,8 @@ namespace json_spirit
     {
         if( type() == int_type )
         {
-            return is_uint64() ? static_cast< double >( get_uint64() )
-                               : static_cast< double >( get_int64() );
+            return is_uint64_t() ? static_cast< double >( get_uint64_t() )
+                               : static_cast< double >( get_int64_t() );
         }
 
         check_type(  real_type );
@@ -483,13 +483,13 @@ namespace json_spirit
         template< class Value > 
         boost::int64_t get_value( const Value& value, Type_to_type< boost::int64_t > )
         {
-            return value.get_int64();
+            return value.get_int64_t();
         }
        
         template< class Value > 
         boost::uint64_t get_value( const Value& value, Type_to_type< boost::uint64_t > )
         {
-            return value.get_uint64();
+            return value.get_uint64_t();
         }
        
         template< class Value > 

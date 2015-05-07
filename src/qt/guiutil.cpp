@@ -1,7 +1,7 @@
 #include "guiutil.h"
-#include "xnaaddressvalidator.h"
+#include "bitcoinaddressvalidator.h"
 #include "walletmodel.h"
-#include "xnaunits.h"
+#include "bitcoinunits.h"
 #include "util.h"
 #include "init.h"
 
@@ -51,12 +51,12 @@ QString dateTimeStr(const QDateTime &date)
     return date.date().toString(Qt::SystemLocaleShortDate) + QString(" ") + date.toString("hh:mm");
 }
 
-QString dateTimeStr(qint64 nTime)
+QString dateTimeStr(int64_t nTime)
 {
     return dateTimeStr(QDateTime::fromTime_t((qint32)nTime));
 }
 
-QFont xnaAddressFont()
+QFont bitcoinAddressFont()
 {
     QFont font("Monospace");
     font.setStyleHint(QFont::TypeWriter);
@@ -67,7 +67,7 @@ void setupAddressWidget(QLineEdit *widget, QWidget *parent)
 {
     widget->setMaxLength(BitcoinAddressValidator::MaxAddressLength);
     widget->setValidator(new BitcoinAddressValidator(parent));
-    widget->setFont(xnaAddressFont());
+    widget->setFont(bitcoinAddressFont());
 }
 
 void setupAmountWidget(QLineEdit *widget, QWidget *parent)
@@ -111,7 +111,7 @@ bool parseBitcoinURI(const QUrl &uri, SendCoinsRecipient *out)
         {
             if(!i->second.isEmpty())
             {
-                if(!BitcoinUnits::parse(BitcoinUnits::XNA, i->second, &rv.amount))
+                if(!BitcoinUnits::parse(BitcoinUnits::BTC, i->second, &rv.amount))
                 {
                     return false;
                 }
@@ -409,7 +409,7 @@ bool SetStartOnSystemStartup(bool fAutoStart)
         boost::filesystem::ofstream optionFile(GetAutostartFilePath(), std::ios_base::out|std::ios_base::trunc);
         if (!optionFile.good())
             return false;
-        // Write a xna.desktop file to the autostart directory:
+        // Write a bitcoin.desktop file to the autostart directory:
         optionFile << "[Desktop Entry]\n";
         optionFile << "Type=Application\n";
         optionFile << "Name=DeOxyRibose\n";

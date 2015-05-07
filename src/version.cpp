@@ -6,12 +6,12 @@
 #include "version.h"
 
 // Name of client reported in the 'version' message. Report the same name
-// for both xnad and xna-qt, to make it harder for attackers to
+// for both bitcoind and bitcoin-qt, to make it harder for attackers to
 // target servers or GUI users specifically.
-const std::string CLIENT_NAME("DeOxyRibose");
+const std::string CLIENT_NAME("Adanine");
 
 // Client version number
-#define CLIENT_VERSION_SUFFIX   " - Rotationary Route"
+#define CLIENT_VERSION_SUFFIX   " - Rampaging Redneck"
 
 
 // The following part of the code determines the CLIENT_BUILD variable.
@@ -37,7 +37,7 @@ const std::string CLIENT_NAME("DeOxyRibose");
 #define GIT_ARCHIVE 1
 #ifdef GIT_ARCHIVE
 #    define GIT_COMMIT_ID ""
-#    define GIT_COMMIT_DATE "1398432165"
+#    define GIT_COMMIT_DATE "08/05/2015"
 #endif
 
 #define BUILD_DESC_FROM_COMMIT(maj,min,rev,build,commit) \

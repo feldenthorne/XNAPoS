@@ -1,10 +1,10 @@
-#ifndef XNAGUI_H
-#define XNAGUI_H
+#ifndef BITCOINGUI_H
+#define BITCOINGUI_H
 
 #include <QMainWindow>
 #include <QSystemTrayIcon>
 
-#include "util.h" // for uint64
+#include "util.h" // for uint64_t
 #include "blockbrowser.h"
 
 class TransactionTableModel;
@@ -47,7 +47,7 @@ public:
     */
     void setClientModel(ClientModel *clientModel);
     /** Set the wallet model.
-        The wallet model represents a xna wallet, and offers access to the list of transactions, address book and sending
+        The wallet model represents a bitcoin wallet, and offers access to the list of transactions, address book and sending
         functionality.
     */
     void setWalletModel(WalletModel *walletModel);
@@ -116,9 +116,9 @@ private:
 
     QMovie *syncIconMovie;
 
-    uint64 nMinMax;
-    uint64 nWeight;
-    uint64 nNetworkWeight;
+    uint64_t nMinMax;
+    uint64_t nWeight;
+    uint64_t nNetworkWeight;
 
     /** Create the main UI actions. */
     void createActions();
@@ -158,7 +158,7 @@ public slots:
       @param[in] nFeeRequired       the required fee
       @param[out] payFee            true to pay the fee, false to not pay the fee
     */
-    void askFee(qint64 nFeeRequired, bool *payFee);
+    void askFee(int64_t nFeeRequired, bool *payFee);
     void handleURI(QString strURI);
 
 private slots:

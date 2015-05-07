@@ -1,5 +1,5 @@
-#ifndef XNAFIELD_H
-#define XNAFIELD_H
+#ifndef BITCOINFIELD_H
+#define BITCOINFIELD_H
 
 #include <QWidget>
 
@@ -8,17 +8,17 @@ class QDoubleSpinBox;
 class QValueComboBox;
 QT_END_NAMESPACE
 
-/** Widget for entering xna amounts.
+/** Widget for entering bitcoin amounts.
   */
 class BitcoinAmountField: public QWidget
 {
     Q_OBJECT
-    Q_PROPERTY(qint64 value READ value WRITE setValue NOTIFY textChanged USER true)
+    Q_PROPERTY(int64_t value READ value WRITE setValue NOTIFY textChanged USER true)
 public:
     explicit BitcoinAmountField(QWidget *parent = 0);
 
-    qint64 value(bool *valid=0) const;
-    void setValue(qint64 value);
+    int64_t value(bool *valid=0) const;
+    void setValue(int64_t value);
 
     /** Mark current value as invalid in UI. */
     void setValid(bool valid);
@@ -57,4 +57,4 @@ private slots:
 };
 
 
-#endif // XNAFIELD_H
+#endif // BITCOINFIELD_H

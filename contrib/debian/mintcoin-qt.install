@@ -1,5 +1,5 @@
 deoxyribose-qt usr/bin
-share/pixmaps/xna32.xpm usr/share/pixmaps
-share/pixmaps/xna80.xpm usr/share/pixmaps
+share/pixmaps/bitcoin32.xpm usr/share/pixmaps
+share/pixmaps/bitcoin80.xpm usr/share/pixmaps
 debian/deoxyribose-qt.desktop usr/share/applications
 debian/deoxyribose-qt.protocol usr/share/kde4/services/

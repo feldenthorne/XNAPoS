@@ -1,4 +1,4 @@
-DeOxyRibose               ICON    "pixmaps/DeOxyRibose.ico"
+BottleCaps               ICON    "pixmaps/BottleCaps.ico"
 
 #include "wx/msw/wx.rc"
 

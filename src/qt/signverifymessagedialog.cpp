@@ -41,8 +41,8 @@ SignVerifyMessageDialog::SignVerifyMessageDialog(QWidget *parent) :
     ui->messageIn_VM->installEventFilter(this);
     ui->signatureIn_VM->installEventFilter(this);
 
-    ui->signatureOut_SM->setFont(GUIUtil::xnaAddressFont());
-    ui->signatureIn_VM->setFont(GUIUtil::xnaAddressFont());
+    ui->signatureOut_SM->setFont(GUIUtil::bitcoinAddressFont());
+    ui->signatureIn_VM->setFont(GUIUtil::bitcoinAddressFont());
 }
 
 SignVerifyMessageDialog::~SignVerifyMessageDialog()

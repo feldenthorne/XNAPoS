@@ -1,7 +1,7 @@
 /*
  * W.J. van der Laan 2011-2012
  */
-#include "xnagui.h"
+#include "bitcoingui.h"
 #include "clientmodel.h"
 #include "walletmodel.h"
 #include "optionsmodel.h"
@@ -23,8 +23,8 @@
 #include <QTranslator>
 #include <QLibraryInfo>
 
-#if defined(XNA_NEED_QT_PLUGINS) && !defined(_XNA_QT_PLUGINS_INCLUDED)
-#define _XNA_QT_PLUGINS_INCLUDED
+#if defined(BITCOIN_NEED_QT_PLUGINS) && !defined(_BITCOIN_QT_PLUGINS_INCLUDED)
+#define _BITCOIN_QT_PLUGINS_INCLUDED
 #define __INSURE__
 #include <QtPlugin>
 Q_IMPORT_PLUGIN(qcncodecs)
@@ -58,7 +58,7 @@ static void ThreadSafeMessageBox(const std::string& message, const std::string& 
     }
 }
 
-static bool ThreadSafeAskFee(int64 nFeeRequired, const std::string& strCaption)
+static bool ThreadSafeAskFee(int64_t nFeeRequired, const std::string& strCaption)
 {
     if(!guiref)
         return false;
@@ -67,7 +67,7 @@ static bool ThreadSafeAskFee(int64 nFeeRequired, const std::string& strCaption)
     bool payFee = false;
 
     QMetaObject::invokeMethod(guiref, "askFee", GUIUtil::blockingGUIThreadConnection(),
-                               Q_ARG(qint64, nFeeRequired),
+                               Q_ARG(int64_t, nFeeRequired),
                                Q_ARG(bool*, &payFee));
 
     return payFee;
@@ -101,7 +101,7 @@ static void QueueShutdown()
  */
 static std::string Translate(const char* psz)
 {
-    return QCoreApplication::translate("xna-core", psz).toStdString();
+    return QCoreApplication::translate("bitcoin-core", psz).toStdString();
 }
 
 /* Handle runaway exceptions. Shows a message box with the problem and quits the program.
@@ -113,7 +113,7 @@ static void handleRunawayException(std::exception *e)
     exit(1);
 }
 
-#ifndef XNA_QT_TEST
+#ifndef BITCOIN_QT_TEST
 int main(int argc, char *argv[])
 {
     // Do this early as we don't want to bother initializing if we are just calling IPC
@@ -124,7 +124,7 @@ int main(int argc, char *argv[])
     QTextCodec::setCodecForCStrings(QTextCodec::codecForTr());
 #endif
 
-    Q_INIT_RESOURCE(xna);
+    Q_INIT_RESOURCE(bitcoin);
     QApplication app(argc, argv);
 
     // Install global event filter that makes sure that long tooltips can be word-wrapped
@@ -133,11 +133,11 @@ int main(int argc, char *argv[])
     // Command-line options take precedence:
     ParseParameters(argc, argv);
 
-    // ... then xna.conf:
+    // ... then bitcoin.conf:
     if (!boost::filesystem::is_directory(GetDataDir(false)))
     {
         // This message can not be translated, as translation is not initialized yet
-        // (which not yet possible because lang=XX can be overridden in xna.conf in the data directory)
+        // (which not yet possible because lang=XX can be overridden in bitcoin.conf in the data directory)
         QMessageBox::critical(0, "DeOxyRibose",
                               QString("Error: Specified data directory \"%1\" does not exist.").arg(QString::fromStdString(mapArgs["-datadir"])));
         return 1;
@@ -175,11 +175,11 @@ int main(int argc, char *argv[])
     if (qtTranslator.load("qt_" + lang_territory, QLibraryInfo::location(QLibraryInfo::TranslationsPath)))
         app.installTranslator(&qtTranslator);
 
-    // Load e.g. xna_de.qm (shortcut "de" needs to be defined in xna.qrc)
+    // Load e.g. bitcoin_de.qm (shortcut "de" needs to be defined in bitcoin.qrc)
     if (translatorBase.load(lang, ":/translations/"))
         app.installTranslator(&translatorBase);
 
-    // Load e.g. xna_de_DE.qm (shortcut "de_DE" needs to be defined in xna.qrc)
+    // Load e.g. bitcoin_de_DE.qm (shortcut "de_DE" needs to be defined in bitcoin.qrc)
     if (translator.load(lang_territory, ":/translations/"))
         app.installTranslator(&translator);
 
@@ -279,4 +279,4 @@ int main(int argc, char *argv[])
     }
     return 0;
 }
-#endif // XNA_QT_TEST
+#endif // BITCOIN_QT_TEST

@@ -1,10 +1,10 @@
 /*
- * Qt4 xna GUI.
+ * Qt4 bitcoin GUI.
  *
  * W.J. van der Laan 2011-2012
  * The Bitcoin Developers 2011-2012
  */
-#include "xnagui.h"
+#include "bitcoingui.h"
 #include "transactiontablemodel.h"
 #include "addressbookpage.h"
 #include "sendcoinsdialog.h"
@@ -19,14 +19,14 @@
 #include "addresstablemodel.h"
 #include "transactionview.h"
 #include "overviewpage.h"
-#include "xnaunits.h"
+#include "bitcoinunits.h"
 #include "guiconstants.h"
 #include "askpassphrasedialog.h"
 #include "notificator.h"
 #include "guiutil.h"
 #include "rpcconsole.h"
 #include "wallet.h"
-#include "xnarpc.h"
+#include "bitcoinrpc.h"
 #include "ui_interface.h"
 #include "blockbrowser.h"
 #include "chatwindow.h"
@@ -66,7 +66,7 @@
 #include <iostream>
 
 extern CWallet *pwalletMain;
-extern int64 nLastCoinStakeSearchInterval;
+extern int64_t nLastCoinStakeSearchInterval;
 extern unsigned int nStakeTargetSpacing;
 
 BitcoinGUI::BitcoinGUI(QWidget *parent):
@@ -87,8 +87,8 @@ BitcoinGUI::BitcoinGUI(QWidget *parent):
     resize(860, 600);
     setWindowTitle(tr("DeOxyRibose") + " - " + tr("Wallet ") + QString::fromStdString(FormatFullVersion()));
 #ifndef Q_OS_MAC
-    qApp->setWindowIcon(QIcon(":icons/xna"));
-    setWindowIcon(QIcon(":icons/xna"));
+    qApp->setWindowIcon(QIcon(":icons/bitcoin"));
+    setWindowIcon(QIcon(":icons/bitcoin"));
 #else
     setUnifiedTitleAndToolBarOnMac(true);
     QApplication::setAttribute(Qt::AA_DontShowIconsInMenus);
@@ -284,7 +284,7 @@ void BitcoinGUI::createActions()
     quitAction->setToolTip(tr("Quit application"));
     quitAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Q));
     quitAction->setMenuRole(QAction::QuitRole);
-    aboutAction = new QAction(QIcon(":/icons/xna"), tr("&About DeOxyRibose"), this);
+    aboutAction = new QAction(QIcon(":/icons/bitcoin"), tr("&About DeOxyRibose"), this);
     aboutAction->setToolTip(tr("Show information about DeOxyRibose"));
     aboutAction->setMenuRole(QAction::AboutRole);
     aboutQtAction = new QAction(QIcon(":/trolltech/qmessagebox/images/qtlogo-64.png"), tr("About &Qt"), this);
@@ -293,7 +293,7 @@ void BitcoinGUI::createActions()
     optionsAction = new QAction(QIcon(":/icons/options"), tr("&Options..."), this);
     optionsAction->setToolTip(tr("Modify configuration options for DeOxyRibose"));
     optionsAction->setMenuRole(QAction::PreferencesRole);
-    toggleHideAction = new QAction(QIcon(":/icons/xna"), tr("&Show / Hide"), this);
+    toggleHideAction = new QAction(QIcon(":/icons/bitcoin"), tr("&Show / Hide"), this);
     encryptWalletAction = new QAction(QIcon(":/icons/lock_closed"), tr("&Encrypt Wallet..."), this);
     encryptWalletAction->setToolTip(tr("Encrypt the private keys that belong to your wallet"));
     encryptWalletAction->setCheckable(true);
@@ -423,10 +423,10 @@ void BitcoinGUI::setClientModel(ClientModel *clientModel)
         {
             setWindowTitle(windowTitle() + QString(" ") + tr("[testnet]"));
 #ifndef Q_OS_MAC
-            qApp->setWindowIcon(QIcon(":icons/xna_testnet"));
-            setWindowIcon(QIcon(":icons/xna_testnet"));
+            qApp->setWindowIcon(QIcon(":icons/bitcoin_testnet"));
+            setWindowIcon(QIcon(":icons/bitcoin_testnet"));
 #else
-            MacDockIconHandler::instance()->setIcon(QIcon(":icons/xna_testnet"));
+            MacDockIconHandler::instance()->setIcon(QIcon(":icons/bitcoin_testnet"));
 #endif
             if(trayIcon)
             {
@@ -772,13 +772,13 @@ void BitcoinGUI::closeEvent(QCloseEvent *event)
     QMainWindow::closeEvent(event);
 }
 
-void BitcoinGUI::askFee(qint64 nFeeRequired, bool *payFee)
+void BitcoinGUI::askFee(int64_t nFeeRequired, bool *payFee)
 {
     QString strMessage =
         tr("This transaction is over the size limit.  You can still send it for a fee of %1, "
           "which goes to the nodes that process your transaction and helps to support the network.  "
           "Do you want to pay the fee?").arg(
-                BitcoinUnits::formatWithUnit(BitcoinUnits::XNA, nFeeRequired));
+                BitcoinUnits::formatWithUnit(BitcoinUnits::BTC, nFeeRequired));
     QMessageBox::StandardButton retval = QMessageBox::question(
           this, tr("Confirm transaction fee"), strMessage,
           QMessageBox::Yes|QMessageBox::Cancel, QMessageBox::Yes);
@@ -790,7 +790,7 @@ void BitcoinGUI::incomingTransaction(const QModelIndex & parent, int start, int 
     if(!walletModel || !clientModel)
         return;
     TransactionTableModel *ttm = walletModel->getTransactionTableModel();
-    qint64 amount = ttm->index(start, TransactionTableModel::Amount, parent)
+    int64_t amount = ttm->index(start, TransactionTableModel::Amount, parent)
                     .data(Qt::EditRole).toULongLong();
     if(!clientModel->inInitialBlockDownload())
     {
@@ -1010,7 +1010,7 @@ void BitcoinGUI::encryptWallet(bool status)
 void BitcoinGUI::checkWallet() 
 { 
      int nMismatchSpent; 
-    int64 nBalanceInQuestion; 
+    int64_t nBalanceInQuestion; 
     int nOrphansFound; 
  
     if(!walletModel) 
@@ -1040,7 +1040,7 @@ void BitcoinGUI::checkWallet()
 void BitcoinGUI::repairWallet() 
 { 
     int nMismatchSpent; 
-    int64 nBalanceInQuestion; 
+    int64_t nBalanceInQuestion; 
     int nOrphansFound; 
  
     if(!walletModel) 
@@ -1260,7 +1260,7 @@ void BitcoinGUI::updateMintingIcon()
     }
     else if (nLastCoinStakeSearchInterval)
     {
-        uint64 nEstimateTime = nStakeTargetSpacing * nNetworkWeight / nWeight;
+        uint64_t nEstimateTime = nStakeTargetSpacing * nNetworkWeight / nWeight;
 
         QString text;
         if (nEstimateTime < 60)

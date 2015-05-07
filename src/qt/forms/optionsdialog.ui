@@ -143,7 +143,7 @@
         </layout>
        </item>
        <item>
-        <widget class="QCheckBox" name="xnaAtStartup">
+        <widget class="QCheckBox" name="bitcoinAtStartup">
          <property name="toolTip">
           <string>Automatically start DeOxyRibose after logging in to the system.</string>
          </property>
@@ -528,7 +528,7 @@
   <customwidget>
    <class>BitcoinAmountField</class>
    <extends>QSpinBox</extends>
-   <header>xnaamountfield.h</header>
+   <header>bitcoinamountfield.h</header>
   </customwidget>
   <customwidget>
    <class>SplitThresholdField</class>

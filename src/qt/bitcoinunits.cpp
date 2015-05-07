@@ -1,4 +1,4 @@
-#include "xnaunits.h"
+#include "bitcoinunits.h"
 
 #include <QStringList>
 
@@ -11,9 +11,9 @@ BitcoinUnits::BitcoinUnits(QObject *parent):
 QList<BitcoinUnits::Unit> BitcoinUnits::availableUnits()
 {
     QList<BitcoinUnits::Unit> unitlist;
-    unitlist.append(XNA);
-    unitlist.append(mXNA);
-    unitlist.append(uXNA);
+    unitlist.append(BTC);
+    unitlist.append(mBTC);
+    unitlist.append(uBTC);
     return unitlist;
 }
 
@@ -21,9 +21,9 @@ bool BitcoinUnits::valid(int unit)
 {
     switch(unit)
     {
-    case XNA:
-    case mXNA:
-    case uXNA:
+    case BTC:
+    case mBTC:
+    case uBTC:
         return true;
     default:
         return false;
@@ -34,9 +34,9 @@ QString BitcoinUnits::name(int unit)
 {
     switch(unit)
     {
-    case XNA: return QString("XNA");
-    case mXNA: return QString("mXNA");
-    case uXNA: return QString::fromUtf8("μXNA");
+    case BTC: return QString("XNA");
+    case mBTC: return QString("mXNA");
+    case uBTC: return QString::fromUtf8("μXNA");
     default: return QString("???");
     }
 }
@@ -45,20 +45,20 @@ QString BitcoinUnits::description(int unit)
 {
     switch(unit)
     {
-    case XNA: return QString("XNA");
-    case mXNA: return QString("Milli-XNA (1 / 1,000)");
-    case uXNA: return QString("Micro-XNA (1 / 1,000,000)");
+    case BTC: return QString("XNA");
+    case mBTC: return QString("Milli-XNA (1 / 1,000)");
+    case uBTC: return QString("Micro-XNA (1 / 1,000,000)");
     default: return QString("???");
     }
 }
 
-qint64 BitcoinUnits::factor(int unit)
+int64_t BitcoinUnits::factor(int unit)
 {
     switch(unit)
     {
-    case XNA:  return 1000000;
-    case mXNA: return 1000;
-    case uXNA: return 1;
+    case BTC:  return 1000000;
+    case mBTC: return 1000;
+    case uBTC: return 1;
     default:   return 1000000;
     }
 }
@@ -67,9 +67,9 @@ int BitcoinUnits::amountDigits(int unit)
 {
     switch(unit)
     {
-    case XNA: return 8; // 21,000,000 (# digits, without commas)
-    case mXNA: return 11; // 21,000,000,000
-    case uXNA: return 14; // 21,000,000,000,000
+    case BTC: return 8; // 21,000,000 (# digits, without commas)
+    case mBTC: return 11; // 21,000,000,000
+    case uBTC: return 14; // 21,000,000,000,000
     default: return 0;
     }
 }
@@ -78,24 +78,24 @@ int BitcoinUnits::decimals(int unit)
 {
     switch(unit)
     {
-    case XNA: return 6;
-    case mXNA: return 3;
-    case uXNA: return 0;
+    case BTC: return 6;
+    case mBTC: return 3;
+    case uBTC: return 0;
     default: return 0;
     }
 }
 
-QString BitcoinUnits::format(int unit, qint64 n, bool fPlus)
+QString BitcoinUnits::format(int unit, int64_t n, bool fPlus)
 {
     // Note: not using straight sprintf here because we do NOT want
     // localized number formatting.
     if(!valid(unit))
         return QString(); // Refuse to format invalid unit
-    qint64 coin = factor(unit);
+    int64_t coin = factor(unit);
     int num_decimals = decimals(unit);
-    qint64 n_abs = (n > 0 ? n : -n);
-    qint64 quotient = n_abs / coin;
-    qint64 remainder = n_abs % coin;
+    int64_t n_abs = (n > 0 ? n : -n);
+    int64_t quotient = n_abs / coin;
+    int64_t remainder = n_abs % coin;
     QString quotient_str = QString::number(quotient);
     QString remainder_str = QString::number(remainder).rightJustified(num_decimals, '0');
 
@@ -112,17 +112,17 @@ QString BitcoinUnits::format(int unit, qint64 n, bool fPlus)
     return quotient_str + QString(".") + remainder_str;
 }
 
-QString BitcoinUnits::formatAge(int unit, qint64 n, bool fPlus) 
+QString BitcoinUnits::formatAge(int unit, int64_t n, bool fPlus) 
 { 
     // Note: not using straight sprintf here because we do NOT want 
     // localized number formatting. 
     if(!valid(unit)) 
         return QString(); // Refuse to format invalid unit 
-    qint64 coin = factor(unit); 
+    int64_t coin = factor(unit); 
     int num_decimals = decimals(unit); 
-    qint64 n_abs = (n > 0 ? n : -n); 
-    qint64 quotient = n_abs / coin; 
-    qint64 remainder = n_abs % coin; 
+    int64_t n_abs = (n > 0 ? n : -n); 
+    int64_t quotient = n_abs / coin; 
+    int64_t remainder = n_abs % coin; 
     QString quotient_str = QString::number(quotient); 
     QString remainder_str = QString::number(remainder).rightJustified(num_decimals, '0'); 
  
@@ -138,12 +138,12 @@ QString BitcoinUnits::formatAge(int unit, qint64 n, bool fPlus)
     return quotient_str + QString(".") + remainder_str; 
 } 
 
-QString BitcoinUnits::formatWithUnit(int unit, qint64 amount, bool plussign)
+QString BitcoinUnits::formatWithUnit(int unit, int64_t amount, bool plussign)
 {
     return format(unit, amount, plussign) + QString(" ") + name(unit);
 }
 
-bool BitcoinUnits::parse(int unit, const QString &value, qint64 *val_out)
+bool BitcoinUnits::parse(int unit, const QString &value, int64_t *val_out)
 {
     if(!valid(unit) || value.isEmpty())
         return false; // Refuse to parse invalid unit or empty string
@@ -172,7 +172,7 @@ bool BitcoinUnits::parse(int unit, const QString &value, qint64 *val_out)
     {
         return false; // Longer numbers will exceed 63 bits
     }
-    qint64 retvalue = str.toLongLong(&ok);
+    int64_t retvalue = str.toLongLong(&ok);
     if(val_out)
     {
         *val_out = retvalue;
