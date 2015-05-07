@@ -130,20 +130,33 @@ OBJS= \
     obj/noui.o \
     obj/kernel.o \
     obj/pbkdf2.o \
-    obj/cubehash.o \
-    obj/luffa.o \
-    obj/aes_helper.o \
-    obj/echo.o \
-    obj/shavite.o \
-    obj/simd.o \
-    obj/blake.o\
-    obj/bmw.o\
-    obj/groestl.o\
-    obj/jh.o\
-    obj/keccak.o\
-    obj/skein.o
+    hash/blake.o \
+    hash/bmw.o \
+    hash/cubehash.o \
+    hash/echo.o \
+    hash/fugue.o \
+    hash/groestl.o \
+    hash/hamsi.o \
+    hash/hamsi_helper.o \
+    hash/haval.o \
+    hash/haval_helper.o \
+    hash/jh.o \
+    hash/keccak.o \
+    hash/luffa.o \
+    hash/md_helper.o \
+    hash/panama.o \
+    hash/ripemd.o \
+    hash/sha2.o \
+    hash/sha2big.o \
+    hash/shabal.o \
+    hash/shavite.o \
+    hash/simd.o \
+    hash/skein.o \
+    hash/tiger.o \
+    hash/utest.o \
+    hash/whirlpool.o
 
-all: deoxyribosed
+all: obj deoxyribosed
 
 test check: test_deoxyribose FORCE
 	./test_deoxyribose
@@ -151,6 +164,10 @@ test check: test_deoxyribose FORCE
 # auto-generated dependencies:
 -include obj/*.P
 -include obj-test/*.P
+-include hash/*.P
+
+obj:
+	mkdir -p $@
 
 obj/build.h: FORCE
 	/bin/sh ../share/genbuild.sh obj/build.h
@@ -189,16 +206,26 @@ obj-test/%.o: test/%.cpp
 	  sed -e 's/#.*//' -e 's/^[^:]*: *//' -e 's/ *\\$$//' \
 	      -e '/^$$/ d' -e 's/$$/ :/' < $(@:%.o=%.d) >> $(@:%.o=%.P); \
 	  rm -f $(@:%.o=%.d)
+	  
+hash/%.o: %.cpp
+	$(CXX) -c $(xCXXFLAGS) -MMD -MF $(@:%.o=%.d) -o $@ $<
+	@cp $(@:%.o=%.d) $(@:%.o=%.P); \
+	  sed -e 's/#.*//' -e 's/^[^:]*: *//' -e 's/ *\\$$//' \
+	      -e '/^$$/ d' -e 's/$$/ :/' < $(@:%.o=%.d) >> $(@:%.o=%.P); \
+	  rm -f $(@:%.o=%.d)
 
 test_deoxyribose: $(TESTOBJS) $(filter-out obj/init.o,$(OBJS:obj/%=obj/%))
 	$(LINK) $(xCXXFLAGS) -o $@ $(LIBPATHS) $^ -Wl,-B$(LMODE) -lboost_unit_test_framework $(xLDFLAGS) $(LIBS)
 
 clean:
-	-rm -f deoxyribosed test_deoxyribose
-	-rm -f obj/*.o
-	-rm -f obj-test/*.o
-	-rm -f obj/*.P
-	-rm -f obj-test/*.P
-	-rm -f obj/build.h
+	-rm -f  deoxyribosed test_deoxyribose
+	-rm -f  obj/*.o
+	-rm -f  obj-test/*.o
+	-rm -f  obj/*.P
+	-rm -f  obj-test/*.P
+	-rm -f  obj/build.h
+	-rm -f  hash/*.o
+	-rm -f  hash/*.P
+	-rm -rf obj
 
 FORCE:
