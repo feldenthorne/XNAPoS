@@ -8,6 +8,6 @@ Comment[es]=X11Coin, una criptomoneda P2P
 Exec=/usr/bin/deoxyribose-qt
 Terminal=false
 Type=Application
-Icon=/usr/share/pixmaps/xna80.xpm
+Icon=/usr/share/pixmaps/bitcoin80.xpm
 MimeType=x-scheme-handler/deoxyribose;
 Categories=Office;

@@ -27,7 +27,7 @@ class SendCoinsRecipient
 public:
     QString address;
     QString label;
-    qint64 amount;
+    int64_t amount;
 };
 
 /** Interface to Bitcoin wallet from Qt view code. */
@@ -63,10 +63,10 @@ public:
     AddressTableModel *getAddressTableModel();
     TransactionTableModel *getTransactionTableModel();
 
-    qint64 getBalance() const;
-    qint64 getStake() const;
-    qint64 getUnconfirmedBalance() const;
-    qint64 getImmatureBalance() const;
+    int64_t getBalance() const;
+    int64_t getStake() const;
+    int64_t getUnconfirmedBalance() const;
+    int64_t getImmatureBalance() const;
     int getNumTransactions() const;
     EncryptionStatus getEncryptionStatus() const;
 
@@ -77,11 +77,11 @@ public:
     struct SendCoinsReturn
     {
         SendCoinsReturn(StatusCode status=Aborted,
-                         qint64 fee=0,
+                         int64_t fee=0,
                          QString hex=QString()):
             status(status), fee(fee), hex(hex) {}
         StatusCode status;
-        qint64 fee; // is used in case status is "AmountWithFeeExceedsBalance"
+        int64_t fee; // is used in case status is "AmountWithFeeExceedsBalance"
         QString hex; // is filled with the transaction hash if status is "OK"
     };
 
@@ -96,13 +96,13 @@ public:
     // Wallet backup
     bool backupWallet(const QString &filename);
 	// Wallet Check/Repair 
-    void checkWallet(int& nMismatchSpent, qint64& nBalanceInQuestion, int& nOrphansFound); 
-    void repairWallet(int& nMismatchSpent, qint64& nBalanceInQuestion, int& nOrphansFound); 
+    void checkWallet(int& nMismatchSpent, int64_t& nBalanceInQuestion, int& nOrphansFound); 
+    void repairWallet(int& nMismatchSpent, int64_t& nBalanceInQuestion, int& nOrphansFound); 
     // Wallet Import/Export
     bool dumpWallet(const QString &filename);
     bool importWallet(const QString &filename);
 	// Stake Weight for coin control dialog 
-	void getStakeWeightFromValue(const qint64& nTime, const qint64& nValue, quint64& nWeight); 
+	void getStakeWeightFromValue(const int64_t& nTime, const int64_t& nValue, quint64& nWeight); 
     // RAI object for unlocking wallet, returned by requestUnlock()
     class UnlockContext
     {
@@ -144,11 +144,11 @@ private:
     TransactionTableModel *transactionTableModel;
 
     // Cache some values to be able to detect changes
-    qint64 cachedBalance;
-    qint64 cachedStake;
-    qint64 cachedUnconfirmedBalance;
-    qint64 cachedImmatureBalance;
-    qint64 cachedNumTransactions;
+    int64_t cachedBalance;
+    int64_t cachedStake;
+    int64_t cachedUnconfirmedBalance;
+    int64_t cachedImmatureBalance;
+    int64_t cachedNumTransactions;
     EncryptionStatus cachedEncryptionStatus;
     int cachedNumBlocks;
 
@@ -171,7 +171,7 @@ public slots:
 
 signals:
     // Signal that balance in wallet changed
-    void balanceChanged(qint64 balance, qint64 stake, qint64 unconfirmedBalance, qint64 immatureBalance);
+    void balanceChanged(int64_t balance, int64_t stake, int64_t unconfirmedBalance, int64_t immatureBalance);
 
     // Number of transactions in wallet changed
     void numTransactionsChanged(int count);

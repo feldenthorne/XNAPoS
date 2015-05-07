@@ -1,5 +1,5 @@
-#ifndef XNAUNITS_H
-#define XNAUNITS_H
+#ifndef BITCOINUNITS_H
+#define BITCOINUNITS_H
 
 #include <QString>
 #include <QAbstractListModel>
@@ -13,13 +13,13 @@ public:
     explicit BitcoinUnits(QObject *parent);
 
     /** Bitcoin units.
-      @note Source: https://en.xna.it/wiki/Units . Please add only sensible ones
+      @note Source: https://en.bitcoin.it/wiki/Units . Please add only sensible ones
      */
     enum Unit
     {
-        XNA,
-        mXNA,
-        uXNA
+        BTC,
+        mBTC,
+        uBTC
     };
 
     //! @name Static API
@@ -35,19 +35,19 @@ public:
     //! Longer description
     static QString description(int unit);
     //! Number of Satoshis (1e-8) per unit
-    static qint64 factor(int unit);
+    static int64_t factor(int unit);
     //! Number of amount digits (to represent max number of coins)
     static int amountDigits(int unit);
     //! Number of decimals left
     static int decimals(int unit);
     //! Format as string
-    static QString format(int unit, qint64 amount, bool plussign=false);
+    static QString format(int unit, int64_t amount, bool plussign=false);
 	//! Format as string 
-    static QString formatAge(int unit, qint64 amount, bool plussign=false); 
+    static QString formatAge(int unit, int64_t amount, bool plussign=false); 
     //! Format as string (with unit)
-    static QString formatWithUnit(int unit, qint64 amount, bool plussign=false);
+    static QString formatWithUnit(int unit, int64_t amount, bool plussign=false);
     //! Parse string to coin amount
-    static bool parse(int unit, const QString &value, qint64 *val_out);
+    static bool parse(int unit, const QString &value, int64_t *val_out);
     ///@}
 
     //! @name AbstractListModel implementation
@@ -65,4 +65,4 @@ private:
 };
 typedef BitcoinUnits::Unit BitcoinUnit;
 
-#endif // XNAUNITS_H
+#endif // BITCOINUNITS_H

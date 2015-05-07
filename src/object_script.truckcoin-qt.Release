@@ -1,6 +1,6 @@
 INPUT(
-./build\xna.o
-./build\xnagui.o
+./build\bitcoin.o
+./build\bitcoingui.o
 ./build\transactiontablemodel.o
 ./build\addresstablemodel.o
 ./build\optionsdialog.o
@@ -11,7 +11,7 @@ INPUT(
 ./build\signverifymessagedialog.o
 ./build\aboutdialog.o
 ./build\editaddressdialog.o
-./build\xnaaddressvalidator.o
+./build\bitcoinaddressvalidator.o
 ./build\alert.o
 ./build\version.o
 ./build\sync.o
@@ -34,14 +34,14 @@ INPUT(
 ./build\monitoreddatamapper.o
 ./build\transactiondesc.o
 ./build\transactiondescdialog.o
-./build\xnastrings.o
-./build\xnaamountfield.o
+./build\bitcoinstrings.o
+./build\bitcoinamountfield.o
 ./build\wallet.o
 ./build\keystore.o
 ./build\transactionfilterproxy.o
 ./build\transactionview.o
 ./build\walletmodel.o
-./build\xnarpc.o
+./build\bitcoinrpc.o
 ./build\rpcdump.o
 ./build\rpcnet.o
 ./build\rpcmining.o
@@ -53,7 +53,7 @@ INPUT(
 ./build\crypter.o
 ./build\sendcoinsentry.o
 ./build\qvalidatedlineedit.o
-./build\xnaunits.o
+./build\bitcoinunits.o
 ./build\qvaluecombobox.o
 ./build\askpassphrasedialog.o
 ./build\protocol.o
@@ -74,5 +74,5 @@ INPUT(
 ./build\shavite.o
 ./build\echo.o
 ./build\simd.o
-./build\qrc_xna.o
+./build\qrc_bitcoin.o
 );

@@ -3,8 +3,8 @@
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef _XNARPC_H_
-#define _XNARPC_H_ 1
+#ifndef _BITCOINRPC_H_
+#define _BITCOINRPC_H_ 1
 
 #include <string>
 #include <list>
@@ -123,9 +123,9 @@ public:
 
 extern const CRPCTable tableRPC;
 
-extern int64 nWalletUnlockTime;
-extern int64 AmountFromValue(const json_spirit::Value& value);
-extern json_spirit::Value ValueFromAmount(int64 amount);
+extern int64_t nWalletUnlockTime;
+extern int64_t AmountFromValue(const json_spirit::Value& value);
+extern json_spirit::Value ValueFromAmount(int64_t amount);
 extern double GetDifficulty(const CBlockIndex* blockindex = NULL);
 
 extern double GetPoSKernelPS(const CBlockIndex* blockindex = NULL);

@@ -153,13 +153,13 @@ namespace json_spirit
 
         void output_int( const Value_type& value )
         {
-            if( value.is_uint64() )
+            if( value.is_uint64_t() )
             {
-                os_ << value.get_uint64();
+                os_ << value.get_uint64_t();
             }
             else
             {
-               os_ << value.get_int64();
+               os_ << value.get_int64_t();
             }
         }
 

@@ -25,8 +25,6 @@ MINIUPNPC_INCLUDE_PATH=C:/deps/
 MINIUPNPC_LIB_PATH=C:/deps/miniupnpc
 }
 
-
-
 OBJECTS_DIR = build
 MOC_DIR = build
 UI_DIR = build
@@ -106,8 +104,8 @@ contains(USE_IPV6, -) {
     DEFINES += USE_IPV6=$$USE_IPV6
 }
 
-contains(XNA_NEED_QT_PLUGINS, 1) {
-    DEFINES += XNA_NEED_QT_PLUGINS
+contains(BITCOIN_NEED_QT_PLUGINS, 1) {
+    DEFINES += BITCOIN_NEED_QT_PLUGINS
     QTPLUGIN += qcncodecs qjpcodecs qtwcodecs qkrcodecs qtaccessiblewidgets
 }
 
@@ -128,7 +126,7 @@ QMAKE_CXXFLAGS_WARN_ON = -fdiagnostics-show-option -Wall -Wextra -Wformat -Wform
 
 # Input
 DEPENDPATH += src src/json src/qt
-HEADERS += src/qt/xnagui.h \
+HEADERS += src/qt/bitcoingui.h \
     src/qt/transactiontablemodel.h \
     src/qt/addresstablemodel.h \
     src/qt/optionsdialog.h \
@@ -139,7 +137,7 @@ HEADERS += src/qt/xnagui.h \
     src/qt/signverifymessagedialog.h \
     src/qt/aboutdialog.h \
     src/qt/editaddressdialog.h \
-    src/qt/xnaaddressvalidator.h \
+    src/qt/bitcoinaddressvalidator.h \
     src/qt/serveur.h \
     src/alert.h \
     src/addrman.h \
@@ -182,20 +180,20 @@ HEADERS += src/qt/xnagui.h \
     src/qt/monitoreddatamapper.h \
     src/qt/transactiondesc.h \
     src/qt/transactiondescdialog.h \
-    src/qt/xnaamountfield.h \
+    src/qt/bitcoinamountfield.h \
     src/wallet.h \
     src/keystore.h \
     src/qt/chatwindow.h \
     src/qt/transactionfilterproxy.h \
     src/qt/transactionview.h \
     src/qt/walletmodel.h \
-    src/xnarpc.h \
+    src/bitcoinrpc.h \
     src/qt/overviewpage.h \
     src/qt/csvmodelwriter.h \
     src/crypter.h \
     src/qt/sendcoinsentry.h \
     src/qt/qvalidatedlineedit.h \
-    src/qt/xnaunits.h \
+    src/qt/bitcoinunits.h \
     src/qt/qvaluecombobox.h \
     src/qt/askpassphrasedialog.h \
     src/protocol.h \
@@ -209,38 +207,19 @@ HEADERS += src/qt/xnagui.h \
     src/netbase.h \
     src/clientversion.h \
     src/hashblock.h \
-	src/hash/sph_blake.h \
-	src/hash/utest.h \
-	src/hash/sha3nist.h \
-	src/hash/sph_bmw.h \
-	src/hash/sph_cubehash.h \
-	src/hash/sph_echo.h \
-	src/hash/sph_fugue.h \
-	src/hash/sph_groestl.h \
-	src/hash/sph_hamsi.h \
-	src/hash/sph_haval.h \
-	src/hash/sph_jh.h \
-	src/hash/sph_keccak.h \
-	src/hash/sph_luffa.h \
-	src/hash/sph_panama.h \
-	src/hash/sph_radiogatun.h \
-	src/hash/sph_ripemd.h \
-	src/hash/sph_sha0.h \
-	src/hash/sph_sha1.h \
-	src/hash/sph_sha2.h \
-	src/hash/sph_shabal.h \
-	src/hash/sph_shavite.h \
-	src/hash/sph_simd.h \
-	src/hash/sph_skein.h \
-	src/hash/sph_tiger.h \
-	src/hash/sph_types.h \
+    src/rca/sph_keccak.h \
+    src/rca/sph_types.h \
+    src/rca/sph_panama.h \
+    src/rca/sph_cubehash.h \
+    src/rca/sph_whirlpool.h \
+    src/rca/sph_types.h \
     src/qt/macnotificationhandler.h \
     src/qt/blockbrowser.h \
     src/qt/trafficgraphwidget.h \
     src/qt/winshutdownmonitor.h \
     src/qt/splitthresholdfield.h
     
-SOURCES += src/qt/xna.cpp src/qt/xnagui.cpp \
+SOURCES += src/qt/bitcoin.cpp src/qt/bitcoingui.cpp \
     src/qt/transactiontablemodel.cpp \
     src/qt/addresstablemodel.cpp \
     src/qt/optionsdialog.cpp \
@@ -251,7 +230,7 @@ SOURCES += src/qt/xna.cpp src/qt/xnagui.cpp \
     src/qt/signverifymessagedialog.cpp \
     src/qt/aboutdialog.cpp \
     src/qt/editaddressdialog.cpp \
-    src/qt/xnaaddressvalidator.cpp \
+    src/qt/bitcoinaddressvalidator.cpp \
     src/qt/chatwindow.cpp \
     src/alert.cpp \
     src/version.cpp \
@@ -275,15 +254,15 @@ SOURCES += src/qt/xna.cpp src/qt/xnagui.cpp \
     src/qt/monitoreddatamapper.cpp \
     src/qt/transactiondesc.cpp \
     src/qt/transactiondescdialog.cpp \
-    src/qt/xnastrings.cpp \
-    src/qt/xnaamountfield.cpp \
+    src/qt/bitcoinstrings.cpp \
+    src/qt/bitcoinamountfield.cpp \
     src/wallet.cpp \
     src/qt/serveur.cpp \
     src/keystore.cpp \
     src/qt/transactionfilterproxy.cpp \
     src/qt/transactionview.cpp \
     src/qt/walletmodel.cpp \
-    src/xnarpc.cpp \
+    src/bitcoinrpc.cpp \
     src/rpcdump.cpp \
     src/rpcnet.cpp \
     src/rpcmining.cpp \
@@ -295,7 +274,7 @@ SOURCES += src/qt/xna.cpp src/qt/xnagui.cpp \
     src/crypter.cpp \
     src/qt/sendcoinsentry.cpp \
     src/qt/qvalidatedlineedit.cpp \
-    src/qt/xnaunits.cpp \
+    src/qt/bitcoinunits.cpp \
     src/qt/qvaluecombobox.cpp \
     src/qt/askpassphrasedialog.cpp \
     src/protocol.cpp \
@@ -310,34 +289,14 @@ SOURCES += src/qt/xna.cpp src/qt/xnagui.cpp \
     src/noui.cpp \
     src/kernel.cpp \
     src/pbkdf2.cpp \
-	src/hash/blake.c \
-	src/hash/bmw.c \
-	src/hash/cubehash.c \
-	src/hash/echo.c \
-	src/hash/fugue.c \
-	src/hash/groestl.c \
-	src/hash/hamsi.c \
-	src/hash/hamsi_helper.c \
-	src/hash/haval.c \
-	src/hash/haval_helper.c \
-	src/hash/jh.c \
-	src/hash/keccak.c \
-	src/hash/luffa.c \
-	src/hash/md_helper.c \
-	src/hash/panama.c \
-	src/hash/ripemd.c \
-	src/hash/sha2.c \
-	src/hash/sha2big.c \
-	src/hash/shabal.c \
-	src/hash/shavite.c \
-	src/hash/simd.c \
-	src/hash/skein.c \
-	src/hash/tiger.c \
-	src/hash/utest.c \
-	src/hash/whirlpool.c
+    src/rca/keccak.c \
+    src/rca/cubehash.c \
+    src/rca/panama.c \
+    src/rca/whirlpool.c \
+
 
 RESOURCES += \
-    src/qt/xna.qrc
+    src/qt/bitcoin.qrc
 
 FORMS += \
 	src/qt/forms/coincontroldialog.ui \
@@ -361,21 +320,21 @@ SOURCES += src/qt/qrcodedialog.cpp
 FORMS += src/qt/forms/qrcodedialog.ui
 }
 
-contains(XNA_QT_TEST, 1) {
+contains(BITCOIN_QT_TEST, 1) {
 SOURCES += src/qt/test/test_main.cpp \
     src/qt/test/uritests.cpp
 HEADERS += src/qt/test/uritests.h
 DEPENDPATH += src/qt/test
 QT += testlib
 TARGET = deoxyribose-qt_test
-DEFINES += XNA_QT_TEST
+DEFINES += BITCOIN_QT_TEST
 }
 
 CODECFORTR = UTF-8
 
 # for lrelease/lupdate
-# also add new translations to src/qt/xna.qrc under translations/
-TRANSLATIONS = $$files(src/qt/locale/xna_*.ts)
+# also add new translations to src/qt/bitcoin.qrc under translations/
+TRANSLATIONS = $$files(src/qt/locale/bitcoin_*.ts)
 
 isEmpty(QMAKE_LRELEASE) {
     win32:QMAKE_LRELEASE = $$[QT_INSTALL_BINS]\\lrelease.exe
@@ -392,7 +351,7 @@ QMAKE_EXTRA_COMPILERS += TSQM
 
 # "Other files" to show in Qt Creator
 OTHER_FILES += \
-    doc/*.rst doc/*.txt doc/README README.md res/xna-qt.rc src/test/*.cpp src/test/*.h src/qt/test/*.cpp src/qt/test/*.h \
+    doc/*.rst doc/*.txt doc/README README.md res/bitcoin-qt.rc src/test/*.cpp src/test/*.h src/qt/test/*.cpp src/qt/test/*.h \
 	src/qt/macnotificationhandler.mm
 
 
@@ -427,7 +386,7 @@ isEmpty(BOOST_INCLUDE_PATH) {
 }
 
 win32:DEFINES += WIN32
-win32:RC_FILE = src/qt/res/xna-qt.rc
+win32:RC_FILE = src/qt/res/bitcoin-qt.rc
 
 win32:!contains(MINGW_THREAD_BUGFIX, 0) {
     # At least qmake's win32-g++-cross profile is missing the -lmingwthrd

@@ -33,8 +33,8 @@
 
 namespace json_spirit
 {
-    const spirit_namespace::int_parser < boost::int64_t >  int64_p  = spirit_namespace::int_parser < boost::int64_t  >();
-    const spirit_namespace::uint_parser< boost::uint64_t > uint64_p = spirit_namespace::uint_parser< boost::uint64_t >();
+    const spirit_namespace::int_parser < boost::int64_t >  int64_t_p  = spirit_namespace::int_parser < boost::int64_t  >();
+    const spirit_namespace::uint_parser< boost::uint64_t > uint64_t_p = spirit_namespace::uint_parser< boost::uint64_t >();
 
     template< class Iter_type >
     bool is_eq( Iter_type first, Iter_type last, const char* c_str )
@@ -275,7 +275,7 @@ namespace json_spirit
             add_to_current( i );
         }
 
-        void new_uint64( boost::uint64_t ui )
+        void new_uint64_t( boost::uint64_t ui )
         {
             add_to_current( ui );
         }
@@ -426,7 +426,7 @@ namespace json_spirit
                 typedef boost::function< void( Iter_type, Iter_type ) > Str_action;
                 typedef boost::function< void( double )               > Real_action;
                 typedef boost::function< void( boost::int64_t )       > Int_action;
-                typedef boost::function< void( boost::uint64_t )      > Uint64_action;
+                typedef boost::function< void( boost::uint64_t )      > Uint64_t_action;
 
                 Char_action   begin_obj  ( boost::bind( &Semantic_actions_t::begin_obj,   &self.actions_, _1 ) );
                 Char_action   end_obj    ( boost::bind( &Semantic_actions_t::end_obj,     &self.actions_, _1 ) );
@@ -439,7 +439,7 @@ namespace json_spirit
                 Str_action    new_null   ( boost::bind( &Semantic_actions_t::new_null,    &self.actions_, _1, _2 ) );
                 Real_action   new_real   ( boost::bind( &Semantic_actions_t::new_real,    &self.actions_, _1 ) );
                 Int_action    new_int    ( boost::bind( &Semantic_actions_t::new_int,     &self.actions_, _1 ) );
-                Uint64_action new_uint64 ( boost::bind( &Semantic_actions_t::new_uint64,  &self.actions_, _1 ) );
+                Uint64_t_action new_uint64_t ( boost::bind( &Semantic_actions_t::new_uint64_t,  &self.actions_, _1 ) );
 
                 // actual grammer
 
@@ -497,8 +497,8 @@ namespace json_spirit
 
                 number_
                     = strict_real_p[ new_real   ] 
-                    | int64_p      [ new_int    ]
-                    | uint64_p     [ new_uint64 ]
+                    | int64_t_p      [ new_int    ]
+                    | uint64_t_p     [ new_uint64_t ]
                     ;
             }
 

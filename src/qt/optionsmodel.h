@@ -27,7 +27,7 @@ public:
         ProxySocksVersion, // int
         SplitThreshold,    // int
         MaxSplitThreshold, // int
-        Fee,               // qint64
+        Fee,               // int64_t
         DisplayUnit,       // BitcoinUnits::Unit
         DisplayAddresses,  // bool
         DetachDatabases,   // bool
@@ -47,7 +47,7 @@ public:
     bool setData(const QModelIndex & index, const QVariant & value, int role = Qt::EditRole);
 
     /* Explicit getters */
-    qint64 getTransactionFee();
+    int64_t getTransactionFee();
     bool getMinimizeToTray();
     bool getMinimizeOnClose();
     int getDisplayUnit();
@@ -70,7 +70,7 @@ private:
 signals:
     void splitThresholdChanged(int unit);
     void displayUnitChanged(int unit);
-	void transactionFeeChanged(qint64);
+	void transactionFeeChanged(int64_t);
     void coinControlFeaturesChanged(bool);
 };
 

@@ -3,7 +3,7 @@
 
 #include "base58.h"
 #include "util.h"
-#include "xnarpc.h"
+#include "bitcoinrpc.h"
 
 using namespace std;
 using namespace json_spirit;

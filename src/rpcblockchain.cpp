@@ -4,7 +4,7 @@
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include "main.h"
-#include "xnarpc.h"
+#include "bitcoinrpc.h"
 
 using namespace json_spirit;
 using namespace std;
@@ -74,7 +74,7 @@ double GetPoSKernelPS(const CBlockIndex* blockindex)
 double GetPoWMHashPS(const CBlockIndex* blockindex)
 {
     int nPoWInterval = 72;
-    int64 nTargetSpacingWorkMin = 1, nTargetSpacingWork = 1;
+    int64_t nTargetSpacingWorkMin = 1, nTargetSpacingWork = 1;
 
     CBlockIndex* pindex = pindexGenesisBlock;
     CBlockIndex* pindexPrevWork = pindexGenesisBlock;
@@ -87,7 +87,7 @@ double GetPoWMHashPS(const CBlockIndex* blockindex)
     {
         if (pindex->IsProofOfWork())
         {
-            int64 nActualSpacingWork = pindex->GetBlockTime() - pindexPrevWork->GetBlockTime();
+            int64_t nActualSpacingWork = pindex->GetBlockTime() - pindexPrevWork->GetBlockTime();
             nTargetSpacingWork = ((nPoWInterval - 1) * nTargetSpacingWork + nActualSpacingWork + nActualSpacingWork) / (nPoWInterval + 1);
             nTargetSpacingWork = max(nTargetSpacingWork, nTargetSpacingWorkMin);
             pindexPrevWork = pindex;

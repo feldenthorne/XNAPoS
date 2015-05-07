@@ -12,18 +12,18 @@ double GetPoWMHashPS(const CBlockIndex* blockindex);
 
 using namespace std;
 
-const CBlockIndex* getBlockIndex(int64 height)
+const CBlockIndex* getBlockIndex(int64_t height)
 {
     std::string hex = getBlockHash(height);
     uint256 hash(hex);
     return mapBlockIndex[hash];
 }
 
-std::string getBlockHash(int64 Height)
+std::string getBlockHash(int64_t Height)
 {
     if(Height > pindexBest->nHeight) { return ""; }
     if(Height < 0) { return ""; }
-    int64 desiredheight;
+    int64_t desiredheight;
     desiredheight = Height;
     if (desiredheight < 0 || desiredheight > nBestHeight)
         return 0;
@@ -35,7 +35,7 @@ std::string getBlockHash(int64 Height)
     return  pblockindex->GetBlockHash().GetHex(); // pblockindex->phashBlock->GetHex();
 }
 
-int64 getBlockTime(int64 Height)
+int64_t getBlockTime(int64_t Height)
 {
     std::string strHash = getBlockHash(Height);
     uint256 hash(strHash);
@@ -47,7 +47,7 @@ int64 getBlockTime(int64 Height)
     return pblockindex->nTime;
 }
 
-std::string getBlockMerkle(int64 Height)
+std::string getBlockMerkle(int64_t Height)
 {
     std::string strHash = getBlockHash(Height);
     uint256 hash(strHash);
@@ -60,7 +60,7 @@ std::string getBlockMerkle(int64 Height)
     return pblockindex->hashMerkleRoot.ToString();//.substr(0,10).c_str();
 }
 
-int64 getBlocknBits(int64 Height)
+int64_t getBlocknBits(int64_t Height)
 {
     std::string strHash = getBlockHash(Height);
     uint256 hash(strHash);
@@ -73,7 +73,7 @@ int64 getBlocknBits(int64 Height)
     return pblockindex->nBits;
 }
 
-int64 getBlockNonce(int64 Height)
+int64_t getBlockNonce(int64_t Height)
 {
     std::string strHash = getBlockHash(Height);
     uint256 hash(strHash);
@@ -112,7 +112,7 @@ double getTxTotalValue(std::string txid)
     return value;
 }
 
-double convertCoins(int64 amount)
+double convertCoins(int64_t amount)
 {
     return (double)amount / (double)COIN;
 }
@@ -205,7 +205,7 @@ double BlockBrowser::getTxFees(std::string txid)
     if (!tx.FetchInputs(txdb, mapUnused, false, false, mapInputs, fInvalid))
 	      return convertCoins(MIN_TX_FEE);
 		  
-    int64 nTxFees = tx.GetValueIn(mapInputs)-tx.GetValueOut();
+    int64_t nTxFees = tx.GetValueIn(mapInputs)-tx.GetValueOut();
 
     if(tx.IsCoinStake() || tx.IsCoinBase()) {
         ui->feesLabel->setText(QString("Reward:"));
@@ -234,7 +234,7 @@ void BlockBrowser::updateExplorer(bool block)
 {    
     if(block)
 	{
-	    int64 height = ui->heightBox->value(); 
+	    int64_t height = ui->heightBox->value(); 
         if (height > pindexBest->nHeight) 
         { 
             ui->heightBox->setValue(pindexBest->nHeight); 

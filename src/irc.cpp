@@ -189,7 +189,7 @@ bool GetIPFromIRC(SOCKET hSocket, string strMyName, CNetAddr& ipRet)
 void ThreadIRCSeed(void* parg)
 {
     // Make this thread recognisable as the IRC seeding thread
-    RenameThread("xna-ircseed");
+    RenameThread("bitcoin-ircseed");
 
     try
     {
@@ -314,7 +314,7 @@ void ThreadIRCSeed2(void* parg)
             Send(hSocket, strprintf("WHO #DeOxyRibose%02d\r", channel_number).c_str());
         }
 
-        int64 nStart = GetTime();
+        int64_t nStart = GetTime();
         string strLine;
         strLine.reserve(10000);
         while (!fShutdown && RecvLineIRC(hSocket, strLine))

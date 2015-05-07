@@ -190,7 +190,7 @@ QVariant AddressTableModel::data(const QModelIndex &index, int role) const
         QFont font;
         if(index.column() == Address)
         {
-            font = GUIUtil::xnaAddressFont();
+            font = GUIUtil::bitcoinAddressFont();
         }
         return font;
     }

@@ -23,17 +23,17 @@ namespace GUIUtil
 {
     // Create human-readable string from date
     QString dateTimeStr(const QDateTime &datetime);
-    QString dateTimeStr(qint64 nTime);
+    QString dateTimeStr(int64_t nTime);
 
     // Render Bitcoin addresses in monospace font
-    QFont xnaAddressFont();
+    QFont bitcoinAddressFont();
 
     // Set up widgets for address and amounts
     void setupAddressWidget(QLineEdit *widget, QWidget *parent);
     void setupAmountWidget(QLineEdit *widget, QWidget *parent);
 
     // Parse "deoxyribose:" URI into recipient object, return true on successful parsing
-    // See Bitcoin URI definition discussion here: https://xnatalk.org/index.php?topic=33490.0
+    // See Bitcoin URI definition discussion here: https://bitcointalk.org/index.php?topic=33490.0
     bool parseBitcoinURI(const QUrl &uri, SendCoinsRecipient *out);
     bool parseBitcoinURI(QString uri, SendCoinsRecipient *out);
 
