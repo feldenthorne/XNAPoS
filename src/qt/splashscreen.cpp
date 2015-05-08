@@ -15,20 +15,20 @@ SplashScreen::SplashScreen(const QPixmap &pixmap, Qt::WindowFlags f) :
     setAutoFillBackground(true);
 
     // set reference point, paddings
-    int paddingRight            = 390;
-    int paddingTop              = 170;
+    int paddingRight            = 420;
+    int paddingTop              = 300;
     int titleVersionVSpace      = 17;
     int titleCopyrightVSpace    = 40;
     int line                    = 11;
 
-    float fontFactor            = 1.0;
+    float fontFactor            = 2.0;
 
     // define text to place
     QString titleText        = tr("DeOxyRibose Core");
     QString versionText      = QString("Version %1").arg(QString::fromStdString(FormatFullVersion()));
     QString copyrightText1   = QChar(0xA9)+QString(" 2009-%1 ").arg(COPYRIGHT_YEAR) + QString(tr("Bitcoin developers"));
     QString copyrightText2   = QChar(0xA9)+QString(" 2012-%1 ").arg(COPYRIGHT_YEAR) + QString(tr("PPCoin Developers"));
-    QString copyrightText3   = QChar(0xA9)+QString(" 2014 ").arg(COPYRIGHT_YEAR) + QString(tr("DeOxyRibose developers"));
+    QString copyrightText3   = QChar(0xA9)+QString(" 2014-%1 ").arg(COPYRIGHT_YEAR) + QString(tr("DeOxyRibose developers"));
     QString testnetAddText   = QString(tr("[testnet]")); // define text to place as single text object
 
     QString font             = "Verdana";
@@ -43,7 +43,7 @@ SplashScreen::SplashScreen(const QPixmap &pixmap, Qt::WindowFlags f) :
     }
 
     QPainter pixPaint(&newPixmap);
-    pixPaint.setPen(QColor(106,102,118));
+    pixPaint.setPen(QColor(255,255,255));
 
     // check font size and drawing with
     pixPaint.setFont(QFont(font, 20*fontFactor));

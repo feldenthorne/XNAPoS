@@ -27,7 +27,7 @@ public:
     void showOutOfSyncWarning(bool fShow);
 
 public slots:
-    void setBalance(int64_t balance, int64_t stake, int64_t unconfirmedBalance);
+    void setBalance(int64_t balance, int64_t stake, int64_t unconfirmedBalance, int64_t immatureBalance);
     void setNumTransactions(int count);
 
 signals:
@@ -39,6 +39,7 @@ private:
     int64_t currentBalance;
     int64_t currentStake;
     int64_t currentUnconfirmedBalance;
+    int64_t currentImmatureBalance;
 
     TxViewDelegate *txdelegate;
     TransactionFilterProxy *filter;
