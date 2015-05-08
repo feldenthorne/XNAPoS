@@ -4,6 +4,7 @@
 
 USE_UPNP:=0
 USE_IPV6:=1
+USE_LEVELDB:=1
 
 LINK:=$(CXX)
 
@@ -108,7 +109,7 @@ OBJS= \
     obj/addrman.o \
     obj/crypter.o \
     obj/key.o \
-    obj/db.o \
+    obj/leveldb.o \
     obj/init.o \
     obj/irc.o \
     obj/keystore.o \
@@ -160,6 +161,19 @@ all: deoxyribosed
 
 test check: test_deoxyribose FORCE
 	./test_deoxyribose
+
+#
+# LevelDB support
+#
+ifdef USE_LEVELDB
+LIBS += $(CURDIR)/leveldb/libleveldb.a $(CURDIR)/leveldb/libmemenv.a
+DEFS += $(addprefix -I,$(CURDIR)/leveldb/include) -DUSE_LEVELDB
+DEFS += $(addprefix -I,$(CURDIR)/leveldb/helpers)
+leveldb/libleveldb.a:
+	@echo "Building LevelDB ..."; cd leveldb; make libleveldb.a libmemenv.a; cd ..;
+obj/leveldb.a: leveldb/libleveldb.a
+endif
+	
 
 # auto-generated dependencies:
 -include obj/*.P

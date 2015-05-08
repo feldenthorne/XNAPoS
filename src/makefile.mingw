@@ -4,6 +4,7 @@
 
 USE_UPNP:=0
 USE_IPV6:=1
+USE_LEVELDB:=1
 
 INCLUDEPATHS= \
  -I"C:/deps/boost_1_55_0" \
@@ -101,6 +102,18 @@ all: deoxyribosed.exe
 test check: test_deoxyribose.exe FORCE
 	test_deoxyribose.exe
 
+#
+# LevelDB support
+#
+ifdef USE_LEVELDB
+LIBS += $(CURDIR)/leveldb/libleveldb.a $(CURDIR)/leveldb/libmemenv.a
+DEFS += $(addprefix -I,$(CURDIR)/leveldb/include) -DUSE_LEVELDB
+DEFS += $(addprefix -I,$(CURDIR)/leveldb/helpers)
+leveldb/libleveldb.a:
+    cd leveldb; make libleveldb.a libmemenv.a; cd ..
+obj/leveldb.a: leveldb/libleveldb.a
+endif
+	
 obj/%.o: %.cpp $(HEADERS)
 	g++ -c $(CFLAGS) -o $@ $<
 
