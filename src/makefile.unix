@@ -109,6 +109,7 @@ OBJS= \
     obj/addrman.o \
     obj/crypter.o \
     obj/key.o \
+    obj/db.o \
     obj/leveldb.o \
     obj/init.o \
     obj/irc.o \
@@ -198,6 +199,7 @@ obj/%.o: %.cpp
 	  rm -f $(@:%.o=%.d)
 
 deoxyribosed: $(OBJS:obj/%=obj/%)
+	@$(MAKE) -C leveldb libleveldb.a libmemenv.a
 	$(LINK) $(xCXXFLAGS) -o $@ $^ $(xLDFLAGS) $(LIBS)
 
 TESTOBJS := $(patsubst test/%.cpp,obj-test/%.o,$(wildcard test/*.cpp))
@@ -228,5 +230,6 @@ clean:
 	-rm -f  obj/*.P
 	-rm -f  obj-test/*.P
 	-rm -f  obj/build.h
+	@$(MAKE) -C leveldb clean
 
 FORCE:
