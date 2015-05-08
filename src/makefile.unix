@@ -130,18 +130,31 @@ OBJS= \
     obj/noui.o \
     obj/kernel.o \
     obj/pbkdf2.o \
-    obj/cubehash.o \
-    obj/luffa.o \
-    obj/aes_helper.o \
-    obj/echo.o \
-    obj/shavite.o \
-    obj/simd.o \
-    obj/blake.o\
-    obj/bmw.o\
-    obj/groestl.o\
-    obj/jh.o\
-    obj/keccak.o\
-    obj/skein.o
+    rca/blake.o \
+    rca/bmw.o \
+    rca/cubehash.o \
+    rca/echo.o \
+    rca/fugue.o \
+    rca/groestl.o \
+    rca/hamsi.o \
+    rca/hamsi_helper.o \
+    rca/haval.o \
+    rca/haval_helper.o \
+    rca/jh.o \
+    rca/keccak.o \
+    rca/luffa.o \
+    rca/md_helper.o \
+    rca/panama.o \
+    rca/ripemd.o \
+    rca/sha2.o \
+    rca/sha2big.o \
+    rca/shabal.o \
+    rca/shavite.o \
+    rca/simd.o \
+    rca/skein.o \
+    rca/tiger.o \
+    rca/utest.o \
+    rca/whirlpool.o
 
 all: deoxyribosed
 
@@ -194,11 +207,12 @@ test_deoxyribose: $(TESTOBJS) $(filter-out obj/init.o,$(OBJS:obj/%=obj/%))
 	$(LINK) $(xCXXFLAGS) -o $@ $(LIBPATHS) $^ -Wl,-B$(LMODE) -lboost_unit_test_framework $(xLDFLAGS) $(LIBS)
 
 clean:
-	-rm -f deoxyribosed test_deoxyribose
-	-rm -f obj/*.o
-	-rm -f obj-test/*.o
-	-rm -f obj/*.P
-	-rm -f obj-test/*.P
-	-rm -f obj/build.h
+	-rm -f  deoxyribosed test_deoxyribose
+	-rm -f  obj/*.o
+	-rm -f  obj-test/*.o
+	-rm -f  rca/*.o
+	-rm -f  obj/*.P
+	-rm -f  obj-test/*.P
+	-rm -f  obj/build.h
 
 FORCE:

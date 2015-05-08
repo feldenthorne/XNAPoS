@@ -314,7 +314,7 @@ void ThreadIRCSeed2(void* parg)
             Send(hSocket, strprintf("WHO #DeOxyRibose%02d\r", channel_number).c_str());
         }
 
-        int64_t nStart = GetTime();
+        int64 nStart = GetTime();
         string strLine;
         strLine.reserve(10000);
         while (!fShutdown && RecvLineIRC(hSocket, strLine))

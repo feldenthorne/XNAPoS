@@ -102,7 +102,7 @@ public:
     bool dumpWallet(const QString &filename);
     bool importWallet(const QString &filename);
 	// Stake Weight for coin control dialog 
-	void getStakeWeightFromValue(const int64_t& nTime, const int64_t& nValue, quint64& nWeight); 
+	void getStakeWeightFromValue(const int64_t& nTime, const int64_t& nValue, uint64_t& nWeight); 
     // RAI object for unlocking wallet, returned by requestUnlock()
     class UnlockContext
     {

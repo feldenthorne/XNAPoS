@@ -49,14 +49,14 @@ struct LocalServiceInfo {
 bool fClient = false;
 bool fDiscover = true;
 bool fUseUPnP = false;
-uint64_t nLocalServices = (fClient ? 0 : NODE_NETWORK);
+uint64 nLocalServices = (fClient ? 0 : NODE_NETWORK);
 static CCriticalSection cs_mapLocalHost;
 static map<CNetAddr, LocalServiceInfo> mapLocalHost;
 static bool vfReachable[NET_MAX] = {};
 static bool vfLimited[NET_MAX] = {};
 static CNode* pnodeLocalHost = NULL;
 CAddress addrSeenByPeer(CService("0.0.0.0", 0), nLocalServices);
-uint64_t nLocalHostNonce = 0;
+uint64 nLocalHostNonce = 0;
 array<int, THREAD_MAX> vnThreadsRunning;
 static std::vector<SOCKET> vhListenSocket;
 CAddrMan addrman;
@@ -64,9 +64,9 @@ CAddrMan addrman;
 vector<CNode*> vNodes;
 CCriticalSection cs_vNodes;
 map<CInv, CDataStream> mapRelay;
-deque<pair<int64_t, CInv> > vRelayExpiration;
+deque<pair<int64, CInv> > vRelayExpiration;
 CCriticalSection cs_mapRelay;
-map<CInv, int64_t> mapAlreadyAskedFor;
+map<CInv, int64> mapAlreadyAskedFor;
 
 static deque<string> vOneShots;
 CCriticalSection cs_vOneShots;
@@ -428,8 +428,8 @@ void AddressCurrentlyConnected(const CService& addr)
     addrman.Connected(addr);
 }
 
-uint64_t CNode::nTotalBytesRecv = 0; 
-uint64_t CNode::nTotalBytesSent = 0; 
+uint64 CNode::nTotalBytesRecv = 0; 
+uint64 CNode::nTotalBytesSent = 0; 
 CCriticalSection CNode::cs_totalBytesRecv; 
 CCriticalSection CNode::cs_totalBytesSent; 
 
@@ -464,7 +464,7 @@ CNode* FindNode(const CService& addr)
     return NULL;
 }
 
-CNode* ConnectNode(CAddress addrConnect, const char *pszDest, int64_t nTimeout)
+CNode* ConnectNode(CAddress addrConnect, const char *pszDest, int64 nTimeout)
 {
     if (pszDest == NULL) {
         if (IsLocal(addrConnect))
@@ -548,7 +548,7 @@ void CNode::Cleanup()
 void CNode::PushVersion()
 {
     /// when NTP implemented, change to just nTime = GetAdjustedTime()
-    int64_t nTime = (fInbound ? GetAdjustedTime() : GetTime());
+    int64 nTime = (fInbound ? GetAdjustedTime() : GetTime());
     CAddress addrYou = (addr.IsRoutable() && !IsProxy(addr) ? addr : CAddress(CService("0.0.0.0",0)));
     CAddress addrMe = GetLocalAddress(&addr);
     RAND_bytes((unsigned char*)&nLocalHostNonce, sizeof(nLocalHostNonce));
@@ -561,7 +561,7 @@ void CNode::PushVersion()
 
 
 
-std::map<CNetAddr, int64_t> CNode::setBanned;
+std::map<CNetAddr, int64> CNode::setBanned;
 CCriticalSection CNode::cs_setBanned;
 
 void CNode::ClearBanned()
@@ -574,10 +574,10 @@ bool CNode::IsBanned(CNetAddr ip)
     bool fResult = false;
     {
         LOCK(cs_setBanned);
-        std::map<CNetAddr, int64_t>::iterator i = setBanned.find(ip);
+        std::map<CNetAddr, int64>::iterator i = setBanned.find(ip);
         if (i != setBanned.end())
         {
-            int64_t t = (*i).second;
+            int64 t = (*i).second;
             if (GetTime() < t)
                 fResult = true;
         }
@@ -598,7 +598,7 @@ bool CNode::Misbehaving(int howmuch)
     nMisbehavior += howmuch;
     if (nMisbehavior >= GetArg("-banscore", 100))
     {
-        int64_t banTime = GetTime()+GetArg("-bantime", 60*60*24);  // Default 24-hour ban
+        int64 banTime = GetTime()+GetArg("-bantime", 60*60*24);  // Default 24-hour ban
         printf("Misbehaving: %s (%d -> %d) DISCONNECTING\n", addr.ToString().c_str(), nMisbehavior-howmuch, nMisbehavior);
         {
             LOCK(cs_setBanned);
@@ -1240,7 +1240,7 @@ unsigned int pnSeed[] =
 
 void DumpAddresses()
 {
-    int64_t nStart = GetTimeMillis();
+    int64 nStart = GetTimeMillis();
 
     CAddrDB adb;
     adb.Write(addrman);
@@ -1344,7 +1344,7 @@ void ThreadOpenConnections2(void* parg)
     // Connect to specific addresses
     if (mapArgs.count("-connect") && mapMultiArgs["-connect"].size() > 0)
     {
-        for (int64_t nLoop = 0;; nLoop++)
+        for (int64 nLoop = 0;; nLoop++)
         {
             ProcessOneShot();
             BOOST_FOREACH(string strAddr, mapMultiArgs["-connect"])
@@ -1363,7 +1363,7 @@ void ThreadOpenConnections2(void* parg)
     }
 
     // Initiate network connections
-    int64_t nStart = GetTime();
+    int64 nStart = GetTime();
     while (true)
     {
         ProcessOneShot();
@@ -1391,7 +1391,7 @@ void ThreadOpenConnections2(void* parg)
                 // it'll get a pile of addresses with newer timestamps.
                 // Seed nodes are given a random 'last seen time' of between one and two
                 // weeks ago.
-                const int64_t nOneWeek = 7*24*60*60;
+                const int64 nOneWeek = 7*24*60*60;
                 struct in_addr ip;
                 memcpy(&ip, &pnSeed[i], sizeof(ip));
                 CAddress addr(CService(ip, GetDefaultPort()));
@@ -1420,7 +1420,7 @@ void ThreadOpenConnections2(void* parg)
             }
         }
 
-        int64_t nANow = GetAdjustedTime();
+        int64 nANow = GetAdjustedTime();
 
         int nTries = 0;
         while (true)
@@ -1911,7 +1911,7 @@ bool StopNode()
     printf("StopNode()\n");
     fShutdown = true;
     nTransactionsUpdated++;
-    int64_t nStart = GetTime();
+    int64 nStart = GetTime();
     if (semOutbound)
         for (int i=0; i<MAX_OUTBOUND_CONNECTIONS; i++)
             semOutbound->post();
@@ -1971,25 +1971,25 @@ public:
 }
 instance_of_cnetcleanup;
 
-void CNode::RecordBytesRecv(uint64_t bytes) 
+void CNode::RecordBytesRecv(uint64 bytes) 
 { 
     LOCK(cs_totalBytesRecv); 
     nTotalBytesRecv += bytes; 
 } 
  
-void CNode::RecordBytesSent(uint64_t bytes) 
+void CNode::RecordBytesSent(uint64 bytes) 
 { 
     LOCK(cs_totalBytesSent); 
     nTotalBytesSent += bytes; 
 } 
  
-uint64_t CNode::GetTotalBytesRecv() 
+uint64 CNode::GetTotalBytesRecv() 
 { 
     LOCK(cs_totalBytesRecv); 
     return nTotalBytesRecv; 
 } 
  
-uint64_t CNode::GetTotalBytesSent() 
+uint64 CNode::GetTotalBytesSent() 
 { 
     LOCK(cs_totalBytesSent); 
     return nTotalBytesSent; 

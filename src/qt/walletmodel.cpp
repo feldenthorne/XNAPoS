@@ -181,7 +181,7 @@ WalletModel::SendCoinsReturn WalletModel::sendCoins(const QList<SendCoinsRecipie
         LOCK2(cs_main, wallet->cs_wallet);
 
         // Sendmany
-        std::vector<std::pair<CScript, int64_t> > vecSend;
+        std::vector<std::pair<CScript, int64> > vecSend;
         foreach(const SendCoinsRecipient &rcp, recipients)
         {
             CScript scriptPubKey;
@@ -191,7 +191,7 @@ WalletModel::SendCoinsReturn WalletModel::sendCoins(const QList<SendCoinsRecipie
 
         CWalletTx wtx;
         CReserveKey keyChange(wallet);
-        int64_t nFeeRequired = 0;
+        int64 nFeeRequired = 0;
         bool fCreated = wallet->CreateTransaction(vecSend, wtx, keyChange, nFeeRequired, coinControl);
 
         if(!fCreated)
@@ -328,17 +328,17 @@ bool WalletModel::importWallet(const QString &filename)
 
 void WalletModel::getStakeWeightFromValue(const int64_t& nTime, const int64_t& nValue, uint64_t& nWeight) 
 { 
-	wallet->GetStakeWeightFromValue(nTime, nValue, nWeight); 
+	wallet->GetStakeWeightFromValue((int64&)nTime, (int64&)nValue, (uint64&)nWeight); 
 } 
 
 void WalletModel::checkWallet(int& nMismatchSpent, int64_t& nBalanceInQuestion, int& nOrphansFound) 
 { 
-    wallet->FixSpentCoins(nMismatchSpent, nBalanceInQuestion, nOrphansFound, true); 
+    wallet->FixSpentCoins(nMismatchSpent, (int64&)nBalanceInQuestion, nOrphansFound, true); 
 } 
  
 void WalletModel::repairWallet(int& nMismatchSpent, int64_t& nBalanceInQuestion, int& nOrphansFound) 
 { 
-    wallet->FixSpentCoins(nMismatchSpent, nBalanceInQuestion, nOrphansFound); 
+    wallet->FixSpentCoins(nMismatchSpent, (int64&)nBalanceInQuestion, nOrphansFound); 
 } 
 
 // Handlers for core signals
