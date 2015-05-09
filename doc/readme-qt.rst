@@ -1,4 +1,4 @@
-Bitcoin-qt: Qt4 GUI for Bitcoin
+Deoxyribose-qt: Qt4 GUI for DeOxyRibose
 ===============================
 
 Build instructions
@@ -12,9 +12,8 @@ distribution are installed, for Debian and Ubuntu these are:
 
 ::
 
-    apt-get install qt4-qmake libqt4-dev build-essential libboost-dev libboost-system-dev \
-        libboost-filesystem-dev libboost-program-options-dev libboost-thread-dev \
-        libssl-dev libdb4.8++-dev
+    apt-get install qt4-qmake libqt4-dev build-essential libboost-all-dev \
+        libssl-dev libdb4.8++-dev libminiupnpc-dev
 
 then execute the following:
 
@@ -23,9 +22,9 @@ then execute the following:
     qmake
     make
 
-Alternatively, install Qt Creator and open the `bitcoin-qt.pro` file.
+Alternatively, install Qt Creator and open the `DeOxyRibose.pro` file.
 
-An executable named `bitcoin-qt` will be built.
+An executable named `deoxyribose-qt` will be built.
 
 
 Windows
@@ -73,13 +72,15 @@ Build configuration options
 UPNnP port forwarding
 ---------------------
 
-To use UPnP for port forwarding behind a NAT router (recommended, as more connections overall allow for a faster and more stable bitcoin experience), pass the following argument to qmake:
+To use UPnP for port forwarding behind a NAT router (recommended, as more connections 
+overall allow for a faster and more stable DeOxyRibose experience), pass the following argument to qmake:
 
 ::
 
     qmake "USE_UPNP=1"
 
-(in **Qt Creator**, you can find the setting for additional qmake arguments under "Projects" -> "Build Settings" -> "Build Steps", then click "Details" next to **qmake**)
+(in **Qt Creator**, you can find the setting for additional qmake arguments under 
+"Projects" -> "Build Settings" -> "Build Steps", then click "Details" next to **qmake**)
 
 This requires miniupnpc for UPnP port mapping.  It can be downloaded from
 http://miniupnp.tuxfamily.org/files/.  UPnP support is not compiled in by default.
@@ -108,8 +109,8 @@ Generation of QR codes
 -----------------------
 
 libqrencode may be used to generate QRCode images for payment requests. 
-It can be downloaded from http://fukuchi.org/works/qrencode/index.html.en, or installed via your package manager. Pass the USE_QRCODE 
-flag to qmake to control this:
+It can be downloaded from http://fukuchi.org/works/qrencode/index.html.en, or installed
+via your package manager. Pass the USE_QRCODE flag to qmake to control this:
 
 +--------------+--------------------------------------------------------------------------+
 | USE_QRCODE=0 | (the default) No QRCode support - libarcode not required                 |
@@ -121,9 +122,10 @@ flag to qmake to control this:
 Berkely DB version warning
 ==========================
 
-A warning for people using the *static binary* version of Bitcoin on a Linux/UNIX-ish system (tl;dr: **Berkely DB databases are not forward compatible**).
+A warning for people using the *static binary* version of DeOxyRibose on a Linux/UNIX-ish 
+system (tl;dr: **Berkely DB databases are not forward compatible**).
 
-The static binary version of Bitcoin is linked against libdb4.8 (see also `this Debian issue`_).
+The static binary version of DeOxyRibose is linked against libdb4.8 (see also `this Debian issue`_).
 
 Now the nasty thing is that databases from 5.X are not compatible with 4.X.
 
@@ -138,7 +140,7 @@ Ubuntu 11.10 warning
 ====================
 
 Ubuntu 11.10 has a package called 'qt-at-spi' installed by default.  At the time of writing, having that package
-installed causes bitcoin-qt to crash intermittently.  The issue has been reported as `launchpad bug 857790`_, but
+installed causes deoxyribose-qt to crash intermittently.  The issue has been reported as `launchpad bug 857790`_, but
 isn't yet fixed.
 
 Until the bug is fixed, you can remove the qt-at-spi package to work around the problem, though this will presumably

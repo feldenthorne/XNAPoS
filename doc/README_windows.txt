@@ -1,9 +1,9 @@
+Copyright (c) 2015 DeOxyRibose Developers
 
-Copyright (c) 2013-2014 TruckCoin Developers
 
+DeOxyRibose 2.1.2.0 Adenine
 
-TruckCoin 0.5.0 BETA
-
+Copyright (c) 2015 DeOxyRibose Developers
 Copyright (c) 2013-2014 TruckCoin Developers
 Copyright (c) 2013 NovaCoin Developers
 Copyright (c) 2011-2012 Bitcoin Developers
@@ -16,10 +16,10 @@ cryptographic software written by Eric Young (eay@cryptsoft.com).
 
 Intro
 -----
-TruckCoin is a free open source project derived from NovaCoin, with
+DeOxyRibose is a free, open-source project derived from TruckCoin, with
 the goal of providing a long-term energy-efficient X11-based crypto-currency.
-Built on the foundation of Bitcoin and NovaCoin, innovations such as proof-of-stake
-help further advance the field of crypto-currency.
+Built on the foundation of Bitcoin, NovaCoin, and TruckCoin, innovations such as 
+proof-of-stake help further advance the field of crypto-currency.
 
 Setup
 -----
@@ -35,8 +35,8 @@ enable Universal Plug and Play (UPnP) with your router/firewall
 or forward port 
 
 10592 (TCP) to your computer so you can receive
-incoming connections.  TruckCoin works without incoming connections,
-but allowing incoming connections helps the TruckCoin network.
+incoming connections. DeOxyRibose works without incoming connections,
+but allowing incoming connections helps the DeOxyRibose network.
 
 Upgrade
 -------
@@ -48,7 +48,6 @@ deoxyribosed stop
 Start up the new deoxyribosed.
 
 
-See the X11Coin site:
-  http://deoxyribose.org/
+See the DeOxyRibose site:
+  http://deoxyribose.cf/forums/
 for help and more information.
-
