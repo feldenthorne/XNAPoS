@@ -980,7 +980,8 @@ int64 GetProofOfStakeReward(int64 nCoinAge, unsigned int nBits, unsigned int nTi
 
 	nRewardCoinYear = 1.5 * MIN_MINT_PROOF_OF_STAKE;
     int64 nSubsidy = nCoinAge * nRewardCoinYear / 365;
-
+	
+	if(nSubsidy >= 10000){nSubsidy = 7000;}
 	if (fDebug && GetBoolArg("-printcreation"))
         printf("GetProofOfStakeReward(): create=%s nCoinAge=%"PRI64d" nBits=%d\n", FormatMoney(nSubsidy).c_str(), nCoinAge, nBits);
     return nSubsidy;
