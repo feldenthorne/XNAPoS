@@ -11,6 +11,9 @@
 #define CLIENT_VERSION_REVISION    1
 #define CLIENT_VERSION_BUILD       0
 
+// This is the client version name, used by the GUI and server for version reporting
+#define CLIENT_VERSION_NAME "Adenine"
+
 // Converts the parameter X to a string after macro replacement on X has been performed.
 // Don't merge these into one macro!
 #define STRINGIZE(X) DO_STRINGIZE(X)

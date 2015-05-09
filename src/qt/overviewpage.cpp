@@ -132,16 +132,17 @@ OverviewPage::~OverviewPage()
     delete ui;
 }
 
-void OverviewPage::setBalance(int64_t balance, int64_t stake, int64_t unconfirmedBalance)
+void OverviewPage::setBalance(int64_t balance, int64_t stake, int64_t unconfirmedBalance, int64_t immatureBalance)
 {
     int unit = model->getOptionsModel()->getDisplayUnit();
     currentBalance = balance;
     currentStake = stake;
     currentUnconfirmedBalance = unconfirmedBalance;
+	currentImmatureBalance = immatureBalance;
     ui->labelBalance->setText(BitcoinUnits::formatWithUnit(unit, balance));
     ui->labelStake->setText(BitcoinUnits::formatWithUnit(unit, stake));
-    ui->labelUnconfirmed->setText(BitcoinUnits::formatWithUnit(unit, unconfirmedBalance));
-	ui->labelTotal->setText(BitcoinUnits::formatWithUnit(unit, (balance + stake + unconfirmedBalance)));
+    ui->labelUnconfirmed->setText(BitcoinUnits::formatWithUnit(unit, unconfirmedBalance + immatureBalance));
+	ui->labelTotal->setText(BitcoinUnits::formatWithUnit(unit, (balance + stake + unconfirmedBalance + immatureBalance)));
 }
 
 void OverviewPage::setNumTransactions(int count)
@@ -166,8 +167,8 @@ void OverviewPage::setModel(WalletModel *model)
         ui->listTransactions->setModelColumn(TransactionTableModel::ToAddress);
 
         // Keep up to date with wallet
-        setBalance(model->getBalance(), model->getStake(), model->getUnconfirmedBalance());
-        connect(model, SIGNAL(balanceChanged(int64_t, int64_t, int64_t)), this, SLOT(setBalance(int64_t, int64_t, int64_t)));
+        setBalance(model->getBalance(), model->getStake(), model->getUnconfirmedBalance(), model->getImmatureBalance());
+        connect(model, SIGNAL(balanceChanged(int64_t, int64_t, int64_t, int64_t)), this, SLOT(setBalance(int64_t, int64_t, int64_t, int64_t)));
 
         setNumTransactions(model->getNumTransactions());
         connect(model, SIGNAL(numTransactionsChanged(int)), this, SLOT(setNumTransactions(int)));
@@ -184,7 +185,7 @@ void OverviewPage::updateDisplayUnit()
     if(model && model->getOptionsModel())
     {
         if(currentBalance != -1)
-            setBalance(currentBalance, model->getStake(), currentUnconfirmedBalance);
+            setBalance(model->getBalance(), model->getStake(), model->getImmatureBalance(),model->getUnconfirmedBalance());
 
         // Update txdelegate->unit with the current unit
         txdelegate->unit = model->getOptionsModel()->getDisplayUnit();

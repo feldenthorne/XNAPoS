@@ -1,6 +1,6 @@
 TEMPLATE = app
 TARGET = deoxyribose-qt
-VERSION = 0.7.2
+VERSION = 2.0.1.0
 INCLUDEPATH += src src/json src/qt
 DEFINES += QT_GUI BOOST_THREAD_USE_LIB BOOST_SPIRIT_THREADSAFE BOOST_THREAD_PROVIDES_GENERIC_SHARED_MUTEX_ON_WIN __NO_SYSTEM_INCLUDES
 CONFIG += no_include_pwd
@@ -118,7 +118,7 @@ contains(USE_LEVELDB, -) {
     LIBS += $$PWD/src/leveldb/libleveldb.a $$PWD/src/leveldb/libmemenv.a
     SOURCES += src/leveldb.cpp
     !windows {
-        #genleveldb.commands = cd $$PWD/src/leveldb ; $(MAKE) libleveldb.a libmemenv.a
+        genleveldb.commands = cd $$PWD/src/leveldb ; $(MAKE) libleveldb.a libmemenv.a
     } else {
         # make an educated guess about what the ranlib command is called
         isEmpty(QMAKE_RANLIB) {
