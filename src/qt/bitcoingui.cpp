@@ -1244,14 +1244,16 @@ void BitcoinGUI::updateMintingIcon()
         labelMintingIcon->setToolTip(tr("Not minting because wallet is offline."));
         labelMintingIcon->setEnabled(false);
     }
-    	else if (!GetBoolArg("-staking", true))
-    {
-        labelMintingIcon->setToolTip(tr("Not minting because staking is disabled."));
-        labelMintingIcon->setEnabled(false);
-    }
+	
     else if (clientModel->getNumConnections() < 3 )
     {
         labelMintingIcon->setToolTip(tr("Not minting because wallet is still acquiring nodes."));
+        labelMintingIcon->setEnabled(false);
+    }
+	
+    	else if (!GetBoolArg("-staking", true))
+    {
+        labelMintingIcon->setToolTip(tr("Not minting because staking is disabled."));
         labelMintingIcon->setEnabled(false);
     }
     else if (IsInitialBlockDownload() || clientModel->getNumBlocks() < clientModel->getNumBlocksOfPeers())
@@ -1266,7 +1268,7 @@ void BitcoinGUI::updateMintingIcon()
     }
     else if (nLastCoinStakeSearchInterval)
     {
-        uint64_t nEstimateTime = nStakeTargetSpacing * nNetworkWeight / nWeight;
+        uint64 nEstimateTime = nStakeTargetSpacing * nNetworkWeight / nWeight;
 
         QString text;
         if (nEstimateTime < 60)
