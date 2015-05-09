@@ -40,7 +40,7 @@ static const int64 MAX_MONEY = 75000000000 * COIN;
 static const int64 MAX_MONEY2 = 75000000000 * COIN;	// 75 Million DeOxyRibose
 static const int64 DEF_SPLIT_AMOUNT = 100 * COIN; 
 static const int64 MAX_SPLIT_AMOUNT = 10000 * COIN; 
-static const int64 MIN_MINT_PROOF_OF_STAKE = 9.72 * COIN; 
+static const int64 MIN_MINT_PROOF_OF_STAKE = 3.71 * COIN; 
 
 static const int MAX_TIME_SINCE_BEST_BLOCK = 10;
 static const int64 MIN_TXOUT_AMOUNT = MIN_TX_FEE;
