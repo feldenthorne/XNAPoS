@@ -2343,17 +2343,17 @@ bool ProcessBlock(CNode* pfrom, CBlock* pblock)
     if (!mapBlockIndex.count(pblock->hashPrevBlock))
     {
         printf("ProcessBlock: ORPHAN BLOCK, prev=%s\n", pblock->hashPrevBlock.ToString().substr(0,20).c_str());
-        CBlock* pblock2 = new CBlock(*pblock);
         // check proof-of-stake
-        if (pblock2->IsProofOfStake())
+        if (pblock->IsProofOfStake())
         {
             // Limited duplicity on stake: prevents block flood attack
             // Duplicate stake allowed only when there is orphan child block
-            if (setStakeSeenOrphan.count(pblock2->GetProofOfStake()) && !mapOrphanBlocksByPrev.count(hash) && !Checkpoints::WantedByPendingSyncCheckpoint(hash))
-                return error("ProcessBlock() : duplicate proof-of-stake (%s, %d) for orphan block %s", pblock2->GetProofOfStake().first.ToString().c_str(), pblock2->GetProofOfStake().second, hash.ToString().c_str());
+		if (setStakeSeenOrphan.count(pblock->GetProofOfStake()) && !mapOrphanBlocksByPrev.count(hash) && !Checkpoints::WantedByPendingSyncCheckpoint(hash)) 
+                  return error("ProcessBlock() : duplicate proof-of-stake (%s, %d) for orphan block %s", pblock->GetProofOfStake().first.ToString().c_str(), pblock->GetProofOfStake().second, hash.ToString().c_str());
             else
-                setStakeSeenOrphan.insert(pblock2->GetProofOfStake());
+                setStakeSeenOrphan.insert(pblock->GetProofOfStake());
         }
+        CBlock* pblock2 = new CBlock(*pblock);
         mapOrphanBlocks.insert(make_pair(hash, pblock2));
         mapOrphanBlocksByPrev.insert(make_pair(pblock2->hashPrevBlock, pblock2));
 
@@ -2849,7 +2849,7 @@ bool LoadExternalBlockFile(FILE* fileIn)
 extern map<uint256, CAlert> mapAlerts;
 extern CCriticalSection cs_mapAlerts;
 
-static string strMintMessage = "Info: Minting suspended due to locked wallet.";
+static string strMintMessage;
 static string strMintWarning;
 
 string GetWarnings(string strFor)
@@ -4419,6 +4419,7 @@ void BitcoinMiner(CWallet *pwallet, bool fProofOfStake)
 
     // Make this thread recognisable as the mining thread
     RenameThread("bitcoin-miner");
+    bool fTryToSync = true;
 
     // Each thread has its own key and counter
     CReserveKey reservekey(pwallet);
@@ -4429,14 +4430,34 @@ void BitcoinMiner(CWallet *pwallet, bool fProofOfStake)
         if (fShutdown)
             return;
 
-        while (vNodes.empty() || IsInitialBlockDownload() || pwallet->IsLocked())
-        {
+		while (pwallet->IsLocked())        {
             nLastCoinStakeSearchInterval = 0;
             Sleep(1000);
             if (fShutdown)
                 return;
             if (!fGenerateBitcoins && !fProofOfStake)
                 return;
+        }
+				
+        while (vNodes.empty() || IsInitialBlockDownload())
+        {
+            nLastCoinStakeSearchInterval = 0;
+            fTryToSync = true;
+            Sleep(1000);
+            if (fShutdown)
+                return;
+            if (!fGenerateBitcoins && !fProofOfStake)
+                return;
+        }
+		
+		        if (fTryToSync)
+        {
+            fTryToSync = false;
+            if (vNodes.size() < 3 || nBestHeight < GetNumBlocksOfPeers())
+            {
+                Sleep(60000);
+                continue;
+            }
         }
 
         //

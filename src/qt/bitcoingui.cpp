@@ -163,6 +163,7 @@ BitcoinGUI::BitcoinGUI(QWidget *parent):
     // Set minting pixmap
     labelMintingIcon->setPixmap(QIcon(":/icons/minting").pixmap(STATUSBAR_ICONSIZE,STATUSBAR_ICONSIZE));
     labelMintingIcon->setEnabled(false);
+	
     // Add timer to update minting info
     QTimer *timerMintingIcon = new QTimer(labelMintingIcon);
     timerMintingIcon->start(MODEL_UPDATE_DELAY);
@@ -1248,7 +1249,12 @@ void BitcoinGUI::updateMintingIcon()
         labelMintingIcon->setToolTip(tr("Not minting because staking is disabled."));
         labelMintingIcon->setEnabled(false);
     }
-    else if (IsInitialBlockDownload())
+    else if (clientModel->getNumConnections() < 3 )
+    {
+        labelMintingIcon->setToolTip(tr("Not minting because wallet is still acquiring nodes."));
+        labelMintingIcon->setEnabled(false);
+    }
+    else if (IsInitialBlockDownload() || clientModel->getNumBlocks() < clientModel->getNumBlocksOfPeers())
     {
         labelMintingIcon->setToolTip(tr("Not minting because wallet is syncing."));
         labelMintingIcon->setEnabled(false);
