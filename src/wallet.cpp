@@ -1385,8 +1385,8 @@ bool CWallet::GetStakeWeightFromValue(const int64& nTime, const int64& nValue, u
 { 
 	//This is a negative value when there is no weight. But set it to zero 
 	//so the user is not confused. Used in reporting in Coin Control. 
-	// Descisions based on this function should be used with care. 
-	int64 nTimeWeight = GetWeight2(nTime, (int64)GetTime()); 
+	// Decisions based on this function should be used with care. 
+	int64 nTimeWeight = GetWeight(nTime, (int64)GetTime()); 
 	if (nTimeWeight < 0 ) 
 		nTimeWeight=0; 
 	 

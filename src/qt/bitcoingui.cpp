@@ -68,6 +68,8 @@
 extern CWallet *pwalletMain;
 extern int64 nLastCoinStakeSearchInterval;
 extern unsigned int nStakeTargetSpacing;
+extern unsigned int nStakeTargetSpacing2;
+extern unsigned int nStakeTargetSpacingChangeHeight;
 
 BitcoinGUI::BitcoinGUI(QWidget *parent):
     QMainWindow(parent),
@@ -1244,14 +1246,10 @@ void BitcoinGUI::updateMintingIcon()
         labelMintingIcon->setToolTip(tr("Not minting because wallet is offline."));
         labelMintingIcon->setEnabled(false);
     }
-    	else if (!GetBoolArg("-staking", true))
+
+    else if (!GetBoolArg("-staking", true))
     {
         labelMintingIcon->setToolTip(tr("Not minting because staking is disabled."));
-        labelMintingIcon->setEnabled(false);
-    }
-    else if (clientModel->getNumConnections() < 3 )
-    {
-        labelMintingIcon->setToolTip(tr("Not minting because wallet is still acquiring nodes."));
         labelMintingIcon->setEnabled(false);
     }
     else if (IsInitialBlockDownload() || clientModel->getNumBlocks() < clientModel->getNumBlocksOfPeers())
@@ -1266,7 +1264,16 @@ void BitcoinGUI::updateMintingIcon()
     }
     else if (nLastCoinStakeSearchInterval)
     {
-        uint64_t nEstimateTime = nStakeTargetSpacing * nNetworkWeight / nWeight;
+        if ( ((unsigned int)clientModel->getNumBlocks()) < nStakeTargetSpacingChangeHeight)
+        {
+            nStakeSpacing = nStakeTargetSpacing;
+        }
+        else
+        {
+            nStakeSpacing = nStakeTargetSpacing2;
+        }
+
+        uint64 nEstimateTime = nStakeTargetSpacing * nNetworkWeight / nWeight;
 
         QString text;
         if (nEstimateTime < 60)
@@ -1301,10 +1308,8 @@ void BitcoinGUI::updateMintingWeights()
     // Only update if we have the network's current number of blocks, or weight(s) are zero (fixes lagging GUI)
     if ((clientModel && clientModel->getNumBlocks() == clientModel->getNumBlocksOfPeers()) || !nWeight || !nNetworkWeight)
     {
-        nWeight = 0;
-
         if (pwalletMain)
-            pwalletMain->GetStakeWeight2(*pwalletMain, nMinMax, nMinMax, nWeight);
+            pwalletMain->GetStakeWeight(*pwalletMain, nMinMax, nMinMax, nWeight);
 
         nNetworkWeight = GetPoSKernelPS();
     }

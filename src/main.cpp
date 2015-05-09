@@ -46,7 +46,8 @@ static CBigNum bnProofOfStakeLimitTestNet(~uint256(0) >> 20);
 unsigned int nStakeMinAge = 12 * 60 * 60;	// minimum age for coin age: 2d
 unsigned int nStakeMaxAge = -1;	// stake age of full weight: -1
 unsigned int nStakeTargetSpacing = 60;			// 60 sec block spacing
-unsigned int nStakeTargetSpacing2 = 65;			// 90 sec block spacing
+unsigned int nStakeTargetSpacing2 = 90;			// 65 sec block spacing
+unsigned int nStakeTargetSpacingChangeHeight = 50000; // chain height to change block spacing
 
 int64 nChainStartTime = 1431008360;
 int nCoinbaseMaturity = 160;
@@ -1135,7 +1136,7 @@ unsigned int GetNextTargetRequired(const CBlockIndex* pindexLast, bool fProofOfS
 		bnNew.SetCompact(pindexPrev->nBits);
 
 		int64 nTargetSpacing;
-		if (pindexPrev->nHeight < 50000)
+		if ((unsigned int)pindexPrev->nHeight < nStakeTargetSpacingChangeHeight)
 			nTargetSpacing = fProofOfStake? nStakeTargetSpacing : min(nTargetSpacingWorkMax, (int64) nStakeTargetSpacing * (1 + pindexLast->nHeight - pindexPrev->nHeight));
 		else nTargetSpacing = fProofOfStake? nStakeTargetSpacing2 : min(nTargetSpacingWorkMax2, (int64) nStakeTargetSpacing2 * (1 + pindexLast->nHeight - pindexPrev->nHeight));
 		
