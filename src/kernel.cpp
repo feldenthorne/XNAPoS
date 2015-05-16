@@ -16,10 +16,9 @@ extern int nStakeTargetSpacing2;
 
 // Modifier interval: time to elapse before new modifier is computed
 // Set to 3-hour for production network and 20-minute for test network
+unsigned int nModifierInterval = MODIFIER_INTERVAL;
 
-unsigned int nModifierInterval = MODIFIER_INTERVAL_POS;
-
-
+         int nModifierIntervalChangeHeight                   = POW_CUTOFF_HEIGHT;
 unsigned int nProtocolModifierIntervalChangeSwitchHeight     = 14420;
 unsigned int nProtocolModifierIntervalChangeTestSwitchHeight = 100;
 
@@ -404,10 +403,18 @@ bool CheckStakeKernelHash(unsigned int nBits, const CBlock& blockFrom, unsigned 
 }
 
 // Check kernel hash target and coinstake signature
-bool CheckProofOfStake(const CTransaction& tx, unsigned int nBits, uint256& hashProofOfStake)
+bool CheckProofOfStake(const CTransaction& tx, int nHeight, unsigned int nBits, uint256& hashProofOfStake)
 {
     if (!tx.IsCoinStake())
         return error("CheckProofOfStake() : called on non-coinstake %s", tx.GetHash().ToString().c_str());
+
+    // If we're over the modifier interval change height, change it
+    if (nHeight > nModifierIntervalChangeHeight){
+        nModifierInterval = MODIFIER_INTERVAL_POS;
+    }
+    else{
+        nModifierInterval = MODIFIER_INTERVAL;
+    }
 
     // Kernel (input 0) must match the stake hash target per coin age (nBits)
     const CTxIn& txin = tx.vin[0];
@@ -429,8 +436,7 @@ bool CheckProofOfStake(const CTransaction& tx, unsigned int nBits, uint256& hash
     if (!block.ReadFromDisk(txindex.pos.nFile, txindex.pos.nBlockPos, false))
         return fDebug? error("CheckProofOfStake() : read block failed") : false; // unable to read block of previous transaction
 
-
-
+    // Check the stake hash to make sure it's a valid transaction
     if (!CheckStakeKernelHash(nBits, block, txindex.pos.nTxPos - txindex.pos.nBlockPos, txPrev, txin.prevout, tx.nTime, hashProofOfStake, fDebug))
         return tx.DoS(1, error("CheckProofOfStake() : INFO: check kernel failed on coinstake %s, hashProof=%s", tx.GetHash().ToString().c_str(), hashProofOfStake.ToString().c_str())); // may occur during initial download or if behind on block chain sync
 
