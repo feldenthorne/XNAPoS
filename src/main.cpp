@@ -978,7 +978,7 @@ int64 GetProofOfStakeReward(int64 nCoinAge, unsigned int nBits, unsigned int nTi
 {
     int64 nSubsidy = 0;
 
-    if ( (int64)nHeight > FORK_POS_REWARD_CHANGE )
+    if ( nTime > FORK_POS_REWARD_CHANGE )
         nSubsidy = GetProofOfStakeRewardV2(nCoinAge, nBits, nTime, nHeight, bCoinYearOnly);
     else
         nSubsidy = GetProofOfStakeRewardV1(nCoinAge, nBits, nTime, nHeight, bCoinYearOnly);
