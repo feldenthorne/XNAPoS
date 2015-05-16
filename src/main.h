@@ -40,7 +40,8 @@ static const int64 MAX_MONEY = 75000000000 * COIN;
 static const int64 MAX_MONEY2 = 75000000000 * COIN;	// 75 Million DeOxyRibose
 static const int64 DEF_SPLIT_AMOUNT = 100 * COIN; 
 static const int64 MAX_SPLIT_AMOUNT = 10000 * COIN; 
-static const int64 MIN_MINT_PROOF_OF_STAKE = 3.71 * COIN; 
+static const int64 MIN_MINT_PROOF_OF_STAKE = 3.71 * COIN;
+static const int64 FORK_POS_REWARD_CHANGE = 12500; // Block 12500 
 
 static const int MAX_TIME_SINCE_BEST_BLOCK = 10;
 static const int64 MIN_TXOUT_AMOUNT = MIN_TX_FEE;
@@ -124,6 +125,8 @@ bool CheckWork(CBlock* pblock, CWallet& wallet, CReserveKey& reservekey);
 bool CheckProofOfWork(uint256 hash, unsigned int nBits);
 int64 GetProofOfWorkReward(int nHeight, int64 nFees, uint256 prevHash);
 int64 GetProofOfStakeReward(int64 nCoinAge, unsigned int nBits, unsigned int nTime, int nHeight, bool bCoinYearOnly);
+int64 GetProofOfStakeRewardV1(int64 nCoinAge, unsigned int nBits, unsigned int nTime, int nHeight, bool bCoinYearOnly);
+int64 GetProofOfStakeRewardV2(int64 nCoinAge, unsigned int nBits, unsigned int nTime, int nHeight, bool bCoinYearOnly);
 unsigned int ComputeMinWork(unsigned int nBase, int64 nTime);
 unsigned int ComputeMinStake(unsigned int nBase, int64 nTime, unsigned int nBlockTime);
 int GetNumBlocksOfPeers();
