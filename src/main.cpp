@@ -976,36 +976,37 @@ double ConvertBitsToDouble(unsigned int nBits)
 
 int64 GetProofOfStakeReward(int64 nCoinAge, unsigned int nBits, unsigned int nTime, int nHeight, bool bCoinYearOnly)
 {
-	int64 nSubsidy = 0;
-	
-	if ( nTime > FORK_POS_REWARD_CHANGE )
-		nSubsidy = GetProofOfStakeRewardV2(nCoinAge, nBits, nTime, nHeight, bCoinYearOnly);
-	else
-		nSubsidy = GetProofOfStakeRewardV1(nCoinAge, nBits, nTime, nHeight, bCoinYearOnly);
-		
-	return nSubsidy;
-}	
+    int64 nSubsidy = 0;
+
+    if ( nTime > FORK_POS_REWARD_CHANGE )
+        nSubsidy = GetProofOfStakeRewardV2(nCoinAge, nBits, nTime, nHeight, bCoinYearOnly);
+    else
+        nSubsidy = GetProofOfStakeRewardV1(nCoinAge, nBits, nTime, nHeight, bCoinYearOnly);
+
+    return nSubsidy;
+}
 
 int64 GetProofOfStakeRewardV1(int64 nCoinAge, unsigned int nBits, unsigned int nTime, int nHeight, bool bCoinYearOnly)
 {
     int64 nRewardCoinYear;
 
-	nRewardCoinYear = 1.5 * MIN_MINT_PROOF_OF_STAKE; // Set to Be Removed!
-    int64 nSubsidy = nCoinAge * nRewardCoinYear / 365; // Set to Be Removed!
-   
-	if (fDebug && GetBoolArg("-printcreation"))
+    nRewardCoinYear = 1.5 * MIN_MINT_PROOF_OF_STAKE;
+    int64 nSubsidy = nCoinAge * nRewardCoinYear / 365;
+
+    if(nSubsidy >= 10000){nSubsidy = 7000;}
+    if (fDebug && GetBoolArg("-printcreation"))
         printf("GetProofOfStakeReward(): create=%s nCoinAge=%"PRI64d" nBits=%d\n", FormatMoney(nSubsidy).c_str(), nCoinAge, nBits);
     return nSubsidy;
 }
 
 int64 GetProofOfStakeRewardV2(int64 nCoinAge, unsigned int nBits, unsigned int nTime, int nHeight, bool bCoinYearOnly)
 {
-	int64 nSubsidy = 5 * COIN;
-	
-	if (fDebug && GetBoolArg("-printcreation"))
+    int64 nSubsidy = 5 * COIN;
+
+    if (fDebug && GetBoolArg("-printcreation"))
         printf("GetProofOfStakeReward(): create=%s nCoinAge=%"PRI64d" nBits=%d\n", FormatMoney(nSubsidy).c_str(), nCoinAge, nBits);
     return nSubsidy;
-}	
+}
 
 static const int64 nTargetTimespan = 60 * 60;
 static const int64 nTargetSpacingWorkMax = 2 * nStakeTargetSpacing; 
@@ -2220,6 +2221,21 @@ bool CBlock::AcceptBlock()
     if (!Checkpoints::CheckHardened(nHeight, hash))
         return DoS(100, error("AcceptBlock() : rejected by hardened checkpoint lock-in at %d", nHeight));
 
+    // Verify hash target and signature of coinstake tx
+    if (IsProofOfStake())
+    {
+        uint256 hashProofOfStake = 0;
+        if (!CheckProofOfStake(vtx[1], nHeight, nBits, hashProofOfStake))
+        {
+            printf("WARNING: AcceptBlock(): check proof-of-stake failed for block %s\n", hash.ToString().c_str());
+            return false; // do not error here as we expect this during initial block download
+        }
+        if (!mapProofOfStake.count(hash)) // add to mapProofOfStake
+            mapProofOfStake.insert(make_pair(hash, hashProofOfStake));
+    }
+    
+    // PoW is checked in CheckBlock()
+
     bool cpSatisfies = Checkpoints::CheckSync(hash, pindexPrev); 
  
     // Check that the block satisfies synchronized checkpoint 
@@ -2316,23 +2332,6 @@ bool ProcessBlock(CNode* pfrom, CBlock* pblock)
     // Preliminary checks
     if (!pblock->CheckBlock())
         return error("ProcessBlock() : CheckBlock FAILED");
-
-    // verify hash target and signature of coinstake tx
-    if (pblock->IsProofOfStake())
-    {
-        uint256 hashProofOfStake = 0;
-        if (!CheckProofOfStake(pblock->vtx[1], pblock->nBits, hashProofOfStake))
-        {
-          // Ignore CheckProofOfStake() failure for hashHighBlock in order to speed up initial 
-	      // blockchain download. 
-	      if (pblock->GetHash() != hashHighBlock) { 
-		  printf("WARNING: ProcessBlock(): check proof-of-stake failed for block %s\n", hash.ToString().c_str()); 
-		  return false; // do not error here as we expect this during initial block download 
-	      }
-        }
-        if (!mapProofOfStake.count(hash)) // add to mapProofOfStake
-            mapProofOfStake.insert(make_pair(hash, hashProofOfStake));
-    }
 
     CBlockIndex* pcheckpoint = Checkpoints::GetLastSyncCheckpoint();
     if (pcheckpoint && pblock->hashPrevBlock != hashBestChain && !Checkpoints::WantedByPendingSyncCheckpoint(hash))
