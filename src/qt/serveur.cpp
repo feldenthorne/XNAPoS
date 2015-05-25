@@ -34,7 +34,7 @@ void Serveur::errorSocket(QAbstractSocket::SocketError error)
 	switch(error)
 	{
 		case QAbstractSocket::HostNotFoundError:
-            affichage->append(tr("<em>ERROR : can't find freenode server.</em>"));
+            affichage->append(tr("<em>ERROR : can't find Rizon server.</em>"));
 			break;
 		case QAbstractSocket::ConnectionRefusedError:
             affichage->append(tr("<em>ERROR : server refused connection</em>"));
@@ -53,7 +53,7 @@ void Serveur::connected()
 
 	sendData("USER "+pseudo+" localhost "+serveur+" :"+pseudo);
     sendData("NICK "+pseudo);
-    affichage->append("Connected to freenode.");
+    affichage->append("Connected to Rizon.");
 
 }
 
@@ -216,7 +216,7 @@ QString Serveur::parseCommande(QString comm,bool serveur)
                     destChan=msg.split(" ").first();
 
                 if(msgQuit=="")
-                    return "PART "+destChan+" using IrcLightClient";
+                    return "PART "+destChan+" using WalletIRC";
                 else
                     return "PART "+destChan+" "+msgQuit;
             }
